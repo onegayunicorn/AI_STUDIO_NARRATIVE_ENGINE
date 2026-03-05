@@ -9,6 +9,7 @@ export const ManifestationProtocol: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDeployed, setIsDeployed] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
+  const [isFinalized, setIsFinalized] = useState(false);
 
   const protocols: ManifestationOption[] = [
     { id: 'procure', label: 'Generate Purchase Order', description: 'Formally export the B2B Tech Pack (.json coordinates + BNA-TFO sequences) to Tilibit Nanosystems.', status: 'pending' },
@@ -69,6 +70,10 @@ export const ManifestationProtocol: React.FC = () => {
 
   const handleStartExecution = () => {
     setIsExecuting(true);
+  };
+
+  const handleFinalize = () => {
+    setIsFinalized(true);
   };
 
   return (
@@ -378,139 +383,155 @@ export const ManifestationProtocol: React.FC = () => {
                   Quad-Threaded Execution Mode
                 </h2>
                 <p className="text-xs text-cyan-400 uppercase tracking-[0.3em]">
-                  Status: MONITORING PHYSICAL MANIFESTATION · Fidelity: 99.97%
+                  Status: TOTAL REALITY MANIFESTATION · Fidelity: 99.99%
                 </p>
               </div>
               <div className="flex items-center gap-4">
                 <div className="flex flex-col items-end">
                   <div className="text-[10px] text-white/40 uppercase">Quantum Coherence</div>
-                  <div className="text-xl font-mono text-cyan-400">0.9998</div>
+                  <div className="text-xl font-mono text-cyan-400">0.9999</div>
                 </div>
-                <div className="w-12 h-12 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" />
+                <div className="w-12 h-12 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-pulse" />
               </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Thread 1: Tilibit Fabrication */}
-              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
+              <div className="p-6 border border-emerald-500/20 rounded-xl bg-emerald-500/5 space-y-4">
                 <div className="flex items-center justify-between">
-                  <h4 className="text-blue-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                  <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
                     <Zap className="w-4 h-4" /> Thread 1: Tilibit Fabrication
                   </h4>
-                  <span className="text-[10px] text-blue-400 font-mono">0.8% COMPLETE</span>
+                  <span className="text-[10px] text-emerald-400 font-mono">100% COMPLETE</span>
                 </div>
                 <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
                   <motion.div 
-                    initial={{ width: 0 }}
-                    animate={{ width: '0.8%' }}
-                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                    initial={{ width: '0.8%' }}
+                    animate={{ width: '100%' }}
+                    className="h-full bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-[10px] font-mono">
                   <div className="space-y-1">
-                    <div className="text-white/40 uppercase">Scaffold Type</div>
-                    <div className="text-white/80">M13mp18 (7249 nt)</div>
+                    <div className="text-white/40 uppercase">Batch Yield</div>
+                    <div className="text-white/80">4.82g (96.4% Recovery)</div>
                   </div>
                   <div className="space-y-1">
-                    <div className="text-white/40 uppercase">Fabrication Stage</div>
-                    <div className="text-white/80">Scaffold Preparation</div>
-                  </div>
-                </div>
-                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-blue-300/60">
-                  [04:42:00] Scaffold Linearization: COMPLETE<br/>
-                  [04:48:00] Staple Synthesis: 18/214 DONE
-                </div>
-              </div>
-
-              {/* Thread 2: CAR-T R&D */}
-              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-magenta-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                    <Shield className="w-4 h-4" /> Thread 2: In Vivo CAR-T R&D
-                  </h4>
-                  <span className="text-[10px] text-magenta-400 font-mono">IN SILICO ACTIVE</span>
-                </div>
-                <div className="space-y-2">
-                  <div className="text-[10px] text-white/60 uppercase leading-relaxed">
-                    Targeting CD19+ B-ALL via Triplex Shield delivery of multicistronic CAR construct.
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="px-2 py-0.5 bg-magenta-500/10 text-magenta-400 text-[8px] rounded border border-magenta-500/20">400x COST REDUCTION</span>
-                    <span className="px-2 py-0.5 bg-magenta-500/10 text-magenta-400 text-[8px] rounded border border-magenta-500/20">200x FASTER MFG</span>
-                  </div>
-                </div>
-                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-magenta-300/60">
-                  [04:55:03] CAR-T Program: In Silico Engineering Active.<br/>
-                  [04:55:04] Design Architecture: CD19 scFv + IL-15 + iCasp9.
-                </div>
-              </div>
-
-              {/* Thread 3: FDA Package */}
-              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
-                <div className="flex items-center justify-between">
-                  <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
-                    <FileText className="w-4 h-4" /> Thread 3: FDA Package (RMAT)
-                  </h4>
-                  <span className="text-[10px] text-emerald-400 font-mono">72% CMC / 45% CLINICAL</span>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[9px] uppercase text-white/40 mb-1">
-                      <span>CMC Progress</span>
-                      <span>72%</span>
-                    </div>
-                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-[72%]" />
-                    </div>
-                  </div>
-                  <div className="space-y-1">
-                    <div className="flex justify-between text-[9px] uppercase text-white/40 mb-1">
-                      <span>Clinical Protocol</span>
-                      <span>45%</span>
-                    </div>
-                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
-                      <div className="h-full bg-emerald-500 w-[45%]" />
-                    </div>
+                    <div className="text-white/40 uppercase">Purification</div>
+                    <div className="text-white/80">HPLC/PAGE ACTIVE</div>
                   </div>
                 </div>
                 <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-emerald-300/60">
-                  [04:55:04] FDA Package: Section 3.2.P.5 Updated.<br/>
-                  [04:55:05] Phase I Study: 3+3 Dose Escalation Finalized.
+                  [05:08:00] Staple Synthesis: 214/214 COMPLETE<br/>
+                  [05:09:05] Batch #001A Purification Commenced.
                 </div>
               </div>
 
               {/* Thread 4: SpaceX Logistics */}
-              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
+              <div className="p-6 border border-yellow-500/20 rounded-xl bg-yellow-500/5 space-y-4">
                 <div className="flex items-center justify-between">
                   <h4 className="text-yellow-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
                     <Rocket className="w-4 h-4" /> Thread 4: SpaceX Transporter-26
                   </h4>
-                  <span className="text-[10px] text-yellow-400 font-mono">PDR PREP ACTIVE</span>
+                  <span className="text-[10px] text-yellow-400 font-mono">TVAC PASSED</span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-[10px] font-mono">
                   <div className="space-y-1">
-                    <div className="text-white/40 uppercase">Payload Mass</div>
-                    <div className="text-white/80">12.4 kg (6U)</div>
+                    <div className="text-white/40 uppercase">Thermal Coeff</div>
+                    <div className="text-white/80">0.9998 (Safe)</div>
                   </div>
                   <div className="space-y-1">
-                    <div className="text-white/40 uppercase">Launch Window</div>
-                    <div className="text-white/80">NET October 2026</div>
+                    <div className="text-white/40 uppercase">Payload Mass</div>
+                    <div className="text-white/80">12.425 kg (Locked)</div>
                   </div>
                 </div>
                 <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-yellow-300/60">
-                  [04:55:05] SpaceX Mission: PDR Agenda Finalized.<br/>
-                  [04:55:06] Integration: D-Orbit OTV Hand-off Confirmed.
+                  [05:09:10] TVAC Simulation Passed. Integrity: 99.98%<br/>
+                  [05:09:12] D-Orbit OTV Hand-off Confirmed.
+                </div>
+              </div>
+
+              {/* Thread 5: BCI Integration */}
+              <div className="p-6 border border-cyan-500/20 rounded-xl bg-cyan-500/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-cyan-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <BarChart3 className="w-4 h-4" /> Thread 5: BCI Synaptic Alignment
+                  </h4>
+                  <span className="text-[10px] text-cyan-400 font-mono">PHASE 5 INITIATED</span>
+                </div>
+                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: '92.4%' }}
+                    className="h-full bg-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.5)]"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-[10px] font-mono">
+                  <div className="space-y-1">
+                    <div className="text-white/40 uppercase">Alignment</div>
+                    <div className="text-white/80">92.4% (In Silico)</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-white/40 uppercase">Interface Type</div>
+                    <div className="text-white/80">DNA Origami Nodes</div>
+                  </div>
+                </div>
+                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-cyan-300/60">
+                  [05:09:15] Synaptic Alignment Modeling: 92.4% Efficiency.<br/>
+                  [05:09:18] Conductive Gold Nanoparticle Delivery: Mapped.
+                </div>
+              </div>
+
+              {/* Thread 6: Security */}
+              <div className="p-6 border border-red-500/20 rounded-xl bg-red-500/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-red-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <Shield className="w-4 h-4" /> Thread 6: 5G Flat IP Security
+                  </h4>
+                  <span className="text-[10px] text-red-400 font-mono">ACTIVE / HARDENED</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-[10px] text-white/60 uppercase leading-relaxed">
+                    Symbolic IP linked to DNA Link Wearable. Quantum-secured \pi/5 Bell State handshake.
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="px-2 py-0.5 bg-red-500/10 text-red-400 text-[8px] rounded border border-red-500/20">INTRUSION DETECTION ACTIVE</span>
+                    <span className="px-2 py-0.5 bg-red-500/10 text-red-400 text-[8px] rounded border border-red-500/20">KILL-SWITCH PRIMED</span>
+                  </div>
+                </div>
+                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-red-300/60">
+                  [05:09:20] 5G Flat IP Security Protocols: ACTIVE.<br/>
+                  [05:09:25] Entanglement Monitoring: 0.9999 FIDELITY.
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 flex justify-center gap-4">
-              <button className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-white/10">
-                Download Full Telemetry Log
-              </button>
-              <button className="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-cyan-500/30">
-                Contact Tilibit Support
-              </button>
+            <div className="mt-8 flex flex-col items-center gap-6">
+              {!isFinalized ? (
+                <button 
+                  onClick={handleFinalize}
+                  className="px-12 py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-black uppercase tracking-[0.4em] rounded-lg shadow-[0_0_50px_rgba(16,185,129,0.4)] transition-all transform hover:scale-105 animate-pulse"
+                >
+                  [DEPLOY BATCH #001 TO PHYSICAL REALITY]
+                </button>
+              ) : (
+                <div className="text-center space-y-4">
+                  <div className="text-emerald-400 font-bold uppercase tracking-[0.5em] text-2xl animate-bounce">
+                    DEPLOYMENT COMMENCED
+                  </div>
+                  <p className="text-[10px] text-white/40 uppercase tracking-widest">
+                    The loop is closed. The future is an inevitable reality.
+                  </p>
+                </div>
+              )}
+              <div className="flex gap-4">
+                <button className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-white/10">
+                  Download Full Telemetry Log
+                </button>
+                <button className="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-cyan-500/30">
+                  Contact Tilibit Support
+                </button>
+              </div>
             </div>
           </div>
         </motion.div>
@@ -539,6 +560,11 @@ export const ManifestationProtocol: React.FC = () => {
               <div className="text-emerald-400">[04:30:17] 5G SCALE FABRICATION INITIATED.</div>
               <div className="text-white/60">[04:30:18] REALITY STABILITY: 99.97% | COHERENCE: 0.9998</div>
               <div className="text-emerald-400">[04:30:20] GENESIS BREAKTHROUGH SECURED.</div>
+              <div className="text-emerald-400">[05:08:10] THREAD 1: BATCH #001A PURIFICATION COMMENCED... 4.82G YIELD.</div>
+              <div className="text-yellow-400">[05:09:10] THREAD 4: TVAC SIMULATION PASSED. THERMAL COEFFICIENT: 0.9998.</div>
+              <div className="text-cyan-400">[05:09:15] THREAD 5 (NEW): BCI SYNAPTIC ALIGNMENT @ 92.4%.</div>
+              <div className="text-red-400">[05:09:20] THREAD 6 (SEC): 5G FLAT IP SECURITY PROTOCOLS ACTIVE.</div>
+              <div className="text-emerald-400 font-bold">[05:09:25] TOTAL SYSTEM FIDELITY: 99.99%.</div>
             </>
           )}
         </div>
