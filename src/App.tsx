@@ -12,19 +12,34 @@ import {
   Layers, 
   Zap, 
   Github as GithubIcon,
-  Terminal
+  Terminal,
+  Rocket,
+  Globe,
+  Palette
 } from 'lucide-react';
 import { TripleHelix } from './components/TripleHelix';
 import { SimFold } from './components/SimFold';
 import { QuantumSpike } from './components/QuantumSpike';
 import { GitHubSynth } from './components/GitHubSynth';
+import { SpaceLogistics } from './components/SpaceLogistics';
+import { CoralSourcing } from './components/CoralSourcing';
+import { HelixDesign } from './components/HelixDesign';
 import { cn } from './utils';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState('dashboard');
   const [activeFold, setActiveFold] = useState(1);
   const [users, setUsers] = useState(8470);
   const [coherence, setCoherence] = useState(0.9997);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+  const navItems = [
+    { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { id: 'space', icon: Rocket, label: 'Space Logistics' },
+    { id: 'coral', icon: Globe, label: 'Coral Sourcing' },
+    { id: 'helix', icon: Palette, label: 'Helix Design' },
+    { id: 'simulation', icon: Terminal, label: 'Simulation Core' },
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -67,18 +82,13 @@ export default function App() {
         </div>
 
         <nav className="flex-1 px-4 py-6 space-y-2">
-          {[
-            { icon: LayoutDashboard, label: 'Dashboard', active: true },
-            { icon: Dna, label: 'Triple Helix' },
-            { icon: Layers, label: 'SimFold 4x' },
-            { icon: Zap, label: 'Quantum Spike' },
-            { icon: GithubIcon, label: 'GitHub Synth' },
-          ].map((item, idx) => (
+          {navItems.map((item) => (
             <button 
-              key={idx}
+              key={item.id}
+              onClick={() => setActiveTab(item.id)}
               className={cn(
                 "w-full flex items-center gap-4 p-3 rounded-lg transition-all group",
-                item.active ? "bg-cyan-500 text-black font-bold" : "hover:bg-white/5 text-white/60 hover:text-white"
+                activeTab === item.id ? "bg-cyan-500 text-black font-bold" : "hover:bg-white/5 text-white/60 hover:text-white"
               )}
             >
               <item.icon className="w-5 h-5" />
@@ -104,8 +114,16 @@ export default function App() {
       <main className="flex-1 overflow-y-auto p-8 relative">
         <header className="flex items-center justify-between mb-12">
           <div>
-            <h1 className="text-4xl font-bold tracking-tighter uppercase glow-cyan mb-2">Narrative Control Center</h1>
-            <p className="text-xs text-white/40 uppercase tracking-[0.3em]">Protocol: FULFILLMENT_V1.0 · Reality: MANIFESTED</p>
+            <h1 className="text-4xl font-bold tracking-tighter uppercase glow-cyan mb-2">
+              {activeTab === 'dashboard' ? 'Execution Control Center' : 
+               activeTab === 'space' ? 'Space Logistics Intelligence' :
+               activeTab === 'coral' ? 'Coral Guardian Sourcing' :
+               activeTab === 'helix' ? 'Triple Helix Design Lab' : 'Simulation Core'}
+            </h1>
+            <p className="text-xs text-white/40 uppercase tracking-[0.3em]">
+              {activeTab === 'dashboard' ? 'Protocol: FULFILLMENT_V1.0 · Phase: EXECUTION' : 
+               'Operational Intelligence · B2B Integration Active'}
+            </p>
           </div>
 
           <div className="flex gap-6">
@@ -120,44 +138,61 @@ export default function App() {
           </div>
         </header>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {[
-            { icon: Users, label: 'Concurrent Users', value: users.toLocaleString(), color: 'text-cyan-400' },
-            { icon: Clock, label: 'Year Progress', value: '64.2%', color: 'text-yellow-400' },
-            { icon: Activity, label: 'Input Volume', value: '1.47 TB/s', color: 'text-magenta-400' },
-            { icon: ShieldAlert, label: 'Anomalies', value: '0', color: 'text-emerald-400' },
-          ].map((stat, idx) => (
-            <motion.div 
-              key={idx}
-              whileHover={{ y: -5 }}
-              className="p-6 glass-panel border border-white/10 rounded-xl"
-            >
-              <div className="flex items-center justify-between mb-4">
-                <stat.icon className={cn("w-5 h-5", stat.color)} />
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              </div>
-              <div className="text-[10px] uppercase opacity-50 mb-1">{stat.label}</div>
-              <div className="text-2xl font-bold font-mono">{stat.value}</div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Complex Components Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-1">
-            <TripleHelix />
-          </div>
-          <div className="lg:col-span-1">
-            <SimFold activeFold={activeFold} />
-          </div>
-          <div className="lg:col-span-1">
-            <div className="flex flex-col gap-8">
-              <QuantumSpike />
-              <GitHubSynth />
+        {/* Dynamic View Content */}
+        {activeTab === 'dashboard' && (
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              {[
+                { icon: Users, label: 'Concurrent Users', value: users.toLocaleString(), color: 'text-cyan-400' },
+                { icon: Clock, label: 'Year Progress', value: '64.2%', color: 'text-yellow-400' },
+                { icon: Activity, label: 'Input Volume', value: '1.47 TB/s', color: 'text-magenta-400' },
+                { icon: ShieldAlert, label: 'Anomalies', value: '0', color: 'text-emerald-400' },
+              ].map((stat, idx) => (
+                <motion.div 
+                  key={idx}
+                  whileHover={{ y: -5 }}
+                  className="p-6 glass-panel border border-white/10 rounded-xl"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <stat.icon className={cn("w-5 h-5", stat.color)} />
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  </div>
+                  <div className="text-[10px] uppercase opacity-50 mb-1">{stat.label}</div>
+                  <div className="text-2xl font-bold font-mono">{stat.value}</div>
+                </motion.div>
+              ))}
             </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-1">
+                <TripleHelix />
+              </div>
+              <div className="lg:col-span-1">
+                <SimFold activeFold={activeFold} />
+              </div>
+              <div className="lg:col-span-1">
+                <div className="flex flex-col gap-8">
+                  <QuantumSpike />
+                  <GitHubSynth />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        {activeTab === 'space' && <SpaceLogistics />}
+        {activeTab === 'coral' && <CoralSourcing />}
+        {activeTab === 'helix' && <HelixDesign />}
+        {activeTab === 'simulation' && (
+          <div className="p-12 border-quantum rounded-xl bg-black/40 text-center">
+            <Terminal className="w-16 h-16 text-cyan-400 mx-auto mb-6" />
+            <h2 className="text-2xl font-bold uppercase mb-4">Simulation Core Active</h2>
+            <p className="text-white/40 max-w-md mx-auto uppercase text-[10px] tracking-widest">
+              Accessing hyperfusion matrix... 847 repositories entangled.
+              Reality manifestation fidelity at 99.97%.
+            </p>
           </div>
-        </div>
+        )}
 
         {/* Terminal / Logs Footer */}
         <footer className="mt-12 p-6 glass-panel border border-white/10 rounded-xl font-mono text-[10px] text-white/40">

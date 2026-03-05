@@ -19,3 +19,25 @@ export interface RepoState {
   status: 'pending' | 'synthesizing' | 'complete';
   progress: number;
 }
+
+export interface Manufacturer {
+  id: string;
+  name: string;
+  region: 'Asia-Pacific' | 'Europe' | 'Americas' | 'MENA';
+  category: '3D Reefs' | 'Robotics' | 'Sensors' | '3D Systems';
+  specialty: string;
+}
+
+export interface MarketStat {
+  label: string;
+  value: string;
+  growth: string;
+}
+
+export interface DesignPrototype {
+  id: string;
+  name: string;
+  type: string;
+  description: string;
+  status: 'Concept' | 'Prototype' | 'Production';
+}
