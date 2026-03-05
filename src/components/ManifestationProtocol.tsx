@@ -9,9 +9,9 @@ export const ManifestationProtocol: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const protocols: ManifestationOption[] = [
-    { id: 'procure', label: 'Finalize Procurement', description: 'Generate B2B Tech Pack for Tilibit Nanosystems including .json coordinates.', status: 'pending' },
-    { id: 'disrupt', label: 'Market Disruption', description: 'Run competitive simulation against AAV systems to calculate Cost-per-Dose.', status: 'pending' },
-    { id: 'orbital', label: 'Orbital Integration', description: 'Sync Space Drone module to calculate G-force limits for Astroscale orbits.', status: 'pending' },
+    { id: 'procure', label: 'Generate Purchase Order', description: 'Formally export the B2B Tech Pack (.json coordinates + BNA-TFO sequences) to Tilibit Nanosystems.', status: 'pending' },
+    { id: 'disrupt', label: 'Export Investor Deck', description: 'Compile 72-Week Asia-Pacific Follow-up data and AAV vs. Triplex cost-comparison for stakeholders.', status: 'pending' },
+    { id: 'orbital', label: 'Commit Launch Slot', description: 'Finalize telemetry handshake with D-Orbit and Astroscale for SpaceX Transporter-26 mission.', status: 'pending' },
   ];
 
   const comparison: ComparisonMetric[] = [
@@ -66,7 +66,8 @@ export const ManifestationProtocol: React.FC = () => {
                 disabled={isProcessing}
                 className="w-full py-3 bg-white/5 hover:bg-white/10 rounded text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 group/btn"
               >
-                Execute Protocol <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                {activeProtocol === protocol.id && !isProcessing ? 'Protocol Manifested' : 'Execute Protocol'} 
+                <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
               </button>
             </div>
           </motion.div>
@@ -74,17 +75,58 @@ export const ManifestationProtocol: React.FC = () => {
       </div>
 
       <AnimatePresence>
-        {activeProtocol === 'disrupt' && !isProcessing && (
+        {activeProtocol === 'procure' && !isProcessing && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="p-8 border-quantum rounded-xl bg-black/60 backdrop-blur-md"
           >
             <h3 className="text-xl font-bold uppercase glow-cyan mb-8 flex items-center gap-3">
-              <BarChart3 className="w-6 h-6 text-cyan-400" /> Competitive Simulation Results
+              <FileText className="w-6 h-6 text-blue-400" /> B2B Purchase Order: Tilibit Nanosystems
             </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 font-mono text-[10px]">
+              <div className="space-y-4">
+                <div className="p-4 border border-white/10 rounded bg-white/5">
+                  <div className="text-blue-400 mb-2 uppercase font-bold">Folding Coordinates (.json)</div>
+                  <div className="opacity-60 break-all">
+                    {"{"}"scaffold": "M13mp18", "staples": 214, "geometry": "hollow_box_v2", "triplex_density": 0.18, "lids": 2{"}"}
+                  </div>
+                </div>
+                <div className="p-4 border border-white/10 rounded bg-white/5">
+                  <div className="text-blue-400 mb-2 uppercase font-bold">BNA-Modified TFO Sequences</div>
+                  <div className="space-y-1">
+                    <div>TFO_1: [BnA]G [BnA]G [BnA]G - T - T - T - [BnA]G [BnA]G [BnA]G</div>
+                    <div>TFO_2: [BnA]A [BnA]A [BnA]A - C - C - C - [BnA]A [BnA]A [BnA]A</div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 border border-emerald-500/20 rounded bg-emerald-500/5 flex flex-col justify-center">
+                <div className="text-emerald-400 text-lg font-bold mb-2 uppercase">PO STATUS: EXPORTED</div>
+                <div className="text-white/60 uppercase tracking-widest leading-relaxed">
+                  Prototype fabrication initiated. Estimated delivery: 14 days. 
+                  Targeting 10,000 unit batch for Phase 3 validation.
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {activeProtocol === 'disrupt' && !isProcessing && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-8 border-quantum rounded-xl bg-black/60 backdrop-blur-md"
+          >
+            <div className="flex items-center justify-between mb-8">
+              <h3 className="text-xl font-bold uppercase glow-cyan flex items-center gap-3">
+                <BarChart3 className="w-6 h-6 text-magenta-400" /> Investor Deck: Series B Summary
+              </h3>
+              <div className="px-4 py-1 bg-magenta-500/20 text-magenta-400 text-[10px] font-bold rounded-full border border-magenta-500/30">
+                72-WEEK FOLLOW-UP DATA INTEGRATED
+              </div>
+            </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               {comparison.map((item, i) => (
                 <div key={i} className="p-4 border border-white/5 rounded-lg bg-white/5">
                   <div className="text-[10px] uppercase opacity-50 mb-4">{item.label}</div>
@@ -94,16 +136,67 @@ export const ManifestationProtocol: React.FC = () => {
                       <div className="text-sm font-mono text-white/60">{item.aav}</div>
                     </div>
                     <div className="pt-2 border-t border-white/5">
-                      <div className="text-[8px] uppercase text-cyan-400 mb-1">Triplex Shield</div>
-                      <div className="text-lg font-bold font-mono text-cyan-400">{item.triplex}</div>
+                      <div className="text-[8px] uppercase text-magenta-400 mb-1">Triplex Shield</div>
+                      <div className="text-lg font-bold font-mono text-magenta-400">{item.triplex}</div>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
 
-            <div className="mt-8 p-4 border border-emerald-500/20 rounded bg-emerald-500/5 text-[10px] uppercase tracking-widest text-emerald-400 text-center">
-              Economic Disruption Confirmed: 30-60x Cost Reduction Potential at Scale.
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-4 border border-white/10 rounded bg-white/5">
+                <div className="text-[10px] uppercase opacity-50 mb-2">Gene Editing Efficiency</div>
+                <div className="text-xl font-bold text-emerald-400">94.3%</div>
+              </div>
+              <div className="p-4 border border-white/10 rounded bg-white/5">
+                <div className="text-[10px] uppercase opacity-50 mb-2">Off-Target Events</div>
+                <div className="text-xl font-bold text-emerald-400">0.02%</div>
+              </div>
+              <div className="p-4 border border-white/10 rounded bg-white/5">
+                <div className="text-[10px] uppercase opacity-50 mb-2">Immune Response</div>
+                <div className="text-xl font-bold text-emerald-400">NONE</div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {activeProtocol === 'orbital' && !isProcessing && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="p-8 border-quantum rounded-xl bg-black/60 backdrop-blur-md"
+          >
+            <h3 className="text-xl font-bold uppercase glow-cyan mb-8 flex items-center gap-3">
+              <Rocket className="w-6 h-6 text-yellow-400" /> Orbital Handshake: SpaceX Transporter-26
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 font-mono text-[10px]">
+              <div className="space-y-4">
+                <div className="p-4 border border-white/10 rounded bg-white/5">
+                  <div className="text-yellow-400 mb-2 uppercase font-bold">Launch Parameters</div>
+                  <div className="space-y-1 opacity-60">
+                    <div>MAX G-FORCE: 10 G</div>
+                    <div>VIBRATION: 6.5 Grms</div>
+                    <div>THERMAL: -20C to +40C</div>
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-4">
+                <div className="p-4 border border-white/10 rounded bg-white/5">
+                  <div className="text-yellow-400 mb-2 uppercase font-bold">Integration Partners</div>
+                  <div className="space-y-1 opacity-60">
+                    <div>D-ORBIT: OTV Hand-off</div>
+                    <div>ASTROSCALE: On-Orbit Storage</div>
+                  </div>
+                </div>
+              </div>
+              <div className="p-6 border border-yellow-500/20 rounded bg-yellow-500/5 flex flex-col justify-center">
+                <div className="text-yellow-400 text-lg font-bold mb-2 uppercase">SLOT COMMITTED: Q4 2026</div>
+                <div className="text-white/60 uppercase tracking-widest leading-relaxed">
+                  Telemetry handshake verified. 
+                  Astroscale debris-removal orbits synchronized.
+                </div>
+              </div>
             </div>
           </motion.div>
         )}
@@ -115,10 +208,10 @@ export const ManifestationProtocol: React.FC = () => {
           <span className="uppercase font-bold">Manifestation Sequence Log</span>
         </div>
         <div className="space-y-1">
-          <div>[04:13:52] INITIALIZING MANIFESTATION PROTOCOL...</div>
-          <div>[04:13:53] REALITY STABILITY: 99.97% | COHERENCE: 0.9998</div>
-          {activeProtocol && <div>[04:14:05] EXECUTING: {protocols.find(p => p.id === activeProtocol)?.label.toUpperCase()}...</div>}
-          {activeProtocol && !isProcessing && <div className="text-emerald-400">[04:14:08] PROTOCOL EXECUTION SUCCESSFUL. DATA INTEGRATED.</div>}
+          <div>[04:20:11] INITIALIZING FINAL MANIFESTATION SEQUENCE...</div>
+          <div>[04:20:12] REALITY STABILITY: 99.97% | COHERENCE: 0.9998</div>
+          {activeProtocol && <div>[04:20:15] EXECUTING: {protocols.find(p => p.id === activeProtocol)?.label.toUpperCase()}...</div>}
+          {activeProtocol && !isProcessing && <div className="text-emerald-400">[04:20:18] PROTOCOL MANIFESTED. GENESIS BREAKTHROUGH SECURED.</div>}
         </div>
       </div>
     </div>
