@@ -1,9 +1,13 @@
-import React from 'react';
-import { motion } from 'motion/react';
-import { Dna, FileText, Palette, Layers } from 'lucide-react';
+import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
+import { Dna, FileText, Palette, Layers, Box } from 'lucide-react';
 import { DesignPrototype } from '../types';
+import { TechPack } from './TechPack';
 
 export const HelixDesign: React.FC = () => {
+  const [showTechPack, setShowTechPack] = useState(false);
+  const [activeRender, setActiveRender] = useState<string | null>(null);
+
   const prototypes: DesignPrototype[] = [
     { id: '1', name: 'Helix Core', type: 'Regenerative Hub', description: 'Central biometric processing unit for gene therapy management.', status: 'Prototype' },
     { id: '2', name: 'DNA Link', type: 'Wearable', description: 'Real-time Hoogsteen interaction monitor for triplex origami delivery.', status: 'Concept' },
@@ -14,11 +18,19 @@ export const HelixDesign: React.FC = () => {
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4">
         {prototypes.map((p) => (
-          <div key={p.id} className="p-6 border-quantum rounded-lg bg-black/40 flex gap-6">
-            <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center border border-white/10">
-              <Dna className="w-10 h-10 text-cyan-400" />
+          <div key={p.id} className="p-6 border-quantum rounded-lg bg-black/40 flex gap-6 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            
+            <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-cyan-500/20 to-magenta-500/20 flex items-center justify-center border border-white/10 relative z-10">
+              <motion.div
+                animate={activeRender === p.id ? { rotateY: 360 } : {}}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <Dna className="w-10 h-10 text-cyan-400" />
+              </motion.div>
             </div>
-            <div className="flex-1">
+
+            <div className="flex-1 relative z-10">
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <h4 className="text-lg font-bold tracking-tighter uppercase text-white">{p.name}</h4>
@@ -30,17 +42,27 @@ export const HelixDesign: React.FC = () => {
               </div>
               <p className="text-xs text-white/60 mb-4 leading-relaxed">{p.description}</p>
               <div className="flex gap-3">
-                <button className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded text-[10px] uppercase tracking-widest transition-colors">
+                <button 
+                  onClick={() => p.id === '2' && setShowTechPack(true)}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded text-[10px] uppercase tracking-widest transition-colors"
+                >
                   <FileText className="w-3 h-3" /> Tech Pack
                 </button>
-                <button className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-white/10 rounded text-[10px] uppercase tracking-widest transition-colors">
-                  <Palette className="w-3 h-3" /> Renders
+                <button 
+                  onClick={() => setActiveRender(activeRender === p.id ? null : p.id)}
+                  className="flex items-center gap-2 px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded text-[10px] uppercase tracking-widest transition-colors"
+                >
+                  <Palette className="w-3 h-3" /> {activeRender === p.id ? 'Stop Render' : 'View Render'}
                 </button>
               </div>
             </div>
           </div>
         ))}
       </div>
+
+      <AnimatePresence>
+        {showTechPack && <TechPack onClose={() => setShowTechPack(false)} />}
+      </AnimatePresence>
 
       <div className="p-6 border-quantum rounded-lg bg-black/40">
         <h3 className="text-sm font-bold mb-4 uppercase tracking-widest text-magenta-400 flex items-center gap-2">
