@@ -5,7 +5,7 @@ import { Rocket, Globe, BarChart3, TrendingUp } from 'lucide-react';
 export const SpaceLogistics: React.FC = () => {
   const stats = [
     { label: 'Market Size (2026)', value: '$8.82B', growth: '+18.8%' },
-    { label: 'OSAM Share', value: '38%', growth: 'Dominant' },
+    { label: 'Max G-Force (Launch)', value: '10 G', growth: 'Stable' },
     { label: 'OTV Efficiency', value: '94%', growth: '+12%' },
   ];
 
@@ -14,6 +14,14 @@ export const SpaceLogistics: React.FC = () => {
     { name: 'D-Orbit', share: '8%', focus: 'Last-Mile Delivery' },
     { name: 'Orbit Fab', share: '5%', focus: 'In-Space Refueling' },
     { name: 'Astroscale', share: '6%', focus: 'Debris Removal' },
+  ];
+
+  const logistics = [
+    { step: 'Manufacturing', partner: 'Lonza, Basel' },
+    { step: 'Cold Chain', partner: 'CharterSync' },
+    { step: 'Launch', partner: 'SpaceX Transporter' },
+    { step: 'Orbital Hand-off', partner: 'D-Orbit OTV' },
+    { step: 'On-Orbit Storage', partner: 'Astroscale Depot' },
   ];
 
   return (
@@ -30,24 +38,49 @@ export const SpaceLogistics: React.FC = () => {
         ))}
       </div>
 
-      <div className="p-6 border-quantum rounded-lg bg-black/40">
-        <h3 className="text-sm font-bold mb-6 uppercase tracking-widest text-cyan-400 flex items-center gap-2">
-          <Rocket className="w-4 h-4" /> Orbital Logistics Landscape
-        </h3>
-        
-        <div className="space-y-4">
-          {players.map((player, i) => (
-            <div key={i} className="flex items-center justify-between p-3 border border-white/5 rounded bg-white/5">
-              <div>
-                <div className="text-xs font-bold">{player.name}</div>
-                <div className="text-[10px] opacity-50 uppercase">{player.focus}</div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="p-6 border-quantum rounded-lg bg-black/40">
+          <h3 className="text-sm font-bold mb-6 uppercase tracking-widest text-cyan-400 flex items-center gap-2">
+            <Rocket className="w-4 h-4" /> Orbital Logistics Landscape
+          </h3>
+          
+          <div className="space-y-4">
+            {players.map((player, i) => (
+              <div key={i} className="flex items-center justify-between p-3 border border-white/5 rounded bg-white/5">
+                <div>
+                  <div className="text-xs font-bold">{player.name}</div>
+                  <div className="text-[10px] opacity-50 uppercase">{player.focus}</div>
+                </div>
+                <div className="text-right">
+                  <div className="text-xs font-mono text-cyan-400">{player.share}</div>
+                  <div className="text-[10px] uppercase opacity-30">Market Share</div>
+                </div>
               </div>
-              <div className="text-right">
-                <div className="text-xs font-mono text-cyan-400">{player.share}</div>
-                <div className="text-[10px] uppercase opacity-30">Market Share</div>
+            ))}
+          </div>
+        </div>
+
+        <div className="p-6 border-quantum rounded-lg bg-black/40">
+          <h3 className="text-sm font-bold mb-6 uppercase tracking-widest text-magenta-400 flex items-center gap-2">
+            <Globe className="w-4 h-4" /> Logistics Pathway
+          </h3>
+          
+          <div className="space-y-3">
+            {logistics.map((item, i) => (
+              <div key={i} className="flex items-center gap-4">
+                <div className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-[10px] font-bold">
+                  {i + 1}
+                </div>
+                <div className="flex-1">
+                  <div className="text-[10px] uppercase opacity-50">{item.step}</div>
+                  <div className="text-xs font-bold">{item.partner}</div>
+                </div>
+                {i < logistics.length - 1 && (
+                  <div className="w-px h-4 bg-white/10 ml-3" />
+                )}
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
 

@@ -15,7 +15,9 @@ import {
   Terminal,
   Rocket,
   Globe,
-  Palette
+  Palette,
+  Box,
+  Cpu
 } from 'lucide-react';
 import { TripleHelix } from './components/TripleHelix';
 import { SimFold } from './components/SimFold';
@@ -24,6 +26,8 @@ import { GitHubSynth } from './components/GitHubSynth';
 import { SpaceLogistics } from './components/SpaceLogistics';
 import { CoralSourcing } from './components/CoralSourcing';
 import { HelixDesign } from './components/HelixDesign';
+import { DNAOrigamiTest } from './components/DNAOrigamiTest';
+import { ManifestationProtocol } from './components/ManifestationProtocol';
 import { cn } from './utils';
 
 export default function App() {
@@ -35,6 +39,8 @@ export default function App() {
 
   const navItems = [
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { id: 'origami', icon: Box, label: 'DNA Origami' },
+    { id: 'manifest', icon: Cpu, label: 'Manifestation' },
     { id: 'space', icon: Rocket, label: 'Space Logistics' },
     { id: 'coral', icon: Globe, label: 'Coral Sourcing' },
     { id: 'helix', icon: Palette, label: 'Helix Design' },
@@ -116,12 +122,16 @@ export default function App() {
           <div>
             <h1 className="text-4xl font-bold tracking-tighter uppercase glow-cyan mb-2">
               {activeTab === 'dashboard' ? 'Execution Control Center' : 
+               activeTab === 'origami' ? 'DNA Origami Delivery Test' :
+               activeTab === 'manifest' ? 'Manifestation Protocol' :
                activeTab === 'space' ? 'Space Logistics Intelligence' :
                activeTab === 'coral' ? 'Coral Guardian Sourcing' :
                activeTab === 'helix' ? 'Triple Helix Design Lab' : 'Simulation Core'}
             </h1>
             <p className="text-xs text-white/40 uppercase tracking-[0.3em]">
               {activeTab === 'dashboard' ? 'Protocol: FULFILLMENT_V1.0 · Phase: EXECUTION' : 
+               activeTab === 'origami' ? 'Phase 2: Triplex Shield Delivery · Active' :
+               activeTab === 'manifest' ? 'Final Command Selection · Reality Manifestation' :
                'Operational Intelligence · B2B Integration Active'}
             </p>
           </div>
@@ -181,6 +191,8 @@ export default function App() {
         )}
 
         {activeTab === 'space' && <SpaceLogistics />}
+        {activeTab === 'origami' && <DNAOrigamiTest />}
+        {activeTab === 'manifest' && <ManifestationProtocol />}
         {activeTab === 'coral' && <CoralSourcing />}
         {activeTab === 'helix' && <HelixDesign />}
         {activeTab === 'simulation' && (

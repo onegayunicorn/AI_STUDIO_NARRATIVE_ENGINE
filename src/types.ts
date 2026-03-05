@@ -34,10 +34,29 @@ export interface MarketStat {
   growth: string;
 }
 
+export interface DNAOrigamiMetric {
+  label: string;
+  value: string | number;
+  status: 'optimal' | 'warning' | 'critical';
+}
+
 export interface DesignPrototype {
   id: string;
   name: string;
   type: string;
   description: string;
   status: 'Concept' | 'Prototype' | 'Production';
+}
+
+export interface ManifestationOption {
+  id: string;
+  label: string;
+  description: string;
+  status: 'pending' | 'active' | 'completed';
+}
+
+export interface ComparisonMetric {
+  label: string;
+  aav: string;
+  triplex: string;
 }
