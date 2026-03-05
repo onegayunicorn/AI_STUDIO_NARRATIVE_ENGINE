@@ -8,6 +8,7 @@ export const ManifestationProtocol: React.FC = () => {
   const [activeProtocol, setActiveProtocol] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isDeployed, setIsDeployed] = useState(false);
+  const [isExecuting, setIsExecuting] = useState(false);
 
   const protocols: ManifestationOption[] = [
     { id: 'procure', label: 'Generate Purchase Order', description: 'Formally export the B2B Tech Pack (.json coordinates + BNA-TFO sequences) to Tilibit Nanosystems.', status: 'pending' },
@@ -64,6 +65,10 @@ export const ManifestationProtocol: React.FC = () => {
 
   const handleDeploy = () => {
     setIsDeployed(true);
+  };
+
+  const handleStartExecution = () => {
+    setIsExecuting(true);
   };
 
   return (
@@ -291,7 +296,7 @@ export const ManifestationProtocol: React.FC = () => {
             )}
           </AnimatePresence>
         </>
-      ) : (
+      ) : !isExecuting ? (
         <motion.div 
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -344,7 +349,10 @@ export const ManifestationProtocol: React.FC = () => {
             <div className="mt-12 p-8 border border-cyan-500/30 rounded-xl bg-cyan-500/5">
               <h3 className="text-lg font-bold uppercase tracking-widest mb-6 text-center">Commander's Final Options</h3>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <button className="py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold uppercase text-[10px] tracking-widest rounded transition-all shadow-lg shadow-emerald-500/20">
+                <button 
+                  onClick={handleStartExecution}
+                  className="py-4 bg-emerald-500 hover:bg-emerald-400 text-black font-bold uppercase text-[10px] tracking-widest rounded transition-all shadow-lg shadow-emerald-500/20"
+                >
                   [DEPLOY BATCH 001]
                 </button>
                 <button className="py-4 bg-white/10 hover:bg-white/20 text-white font-bold uppercase text-[10px] tracking-widest rounded transition-all">
@@ -354,6 +362,155 @@ export const ManifestationProtocol: React.FC = () => {
                   [ACCELERATE]
                 </button>
               </div>
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="space-y-8"
+        >
+          <div className="p-8 border-quantum rounded-2xl bg-black/80 backdrop-blur-xl border-cyan-500/30">
+            <div className="flex items-center justify-between mb-8">
+              <div>
+                <h2 className="text-3xl font-bold uppercase tracking-tighter glow-cyan mb-2">
+                  Quad-Threaded Execution Mode
+                </h2>
+                <p className="text-xs text-cyan-400 uppercase tracking-[0.3em]">
+                  Status: MONITORING PHYSICAL MANIFESTATION · Fidelity: 99.97%
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="flex flex-col items-end">
+                  <div className="text-[10px] text-white/40 uppercase">Quantum Coherence</div>
+                  <div className="text-xl font-mono text-cyan-400">0.9998</div>
+                </div>
+                <div className="w-12 h-12 rounded-full border-2 border-cyan-500/30 border-t-cyan-500 animate-spin" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              {/* Thread 1: Tilibit Fabrication */}
+              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-blue-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <Zap className="w-4 h-4" /> Thread 1: Tilibit Fabrication
+                  </h4>
+                  <span className="text-[10px] text-blue-400 font-mono">0.8% COMPLETE</span>
+                </div>
+                <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                  <motion.div 
+                    initial={{ width: 0 }}
+                    animate={{ width: '0.8%' }}
+                    className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.5)]"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-[10px] font-mono">
+                  <div className="space-y-1">
+                    <div className="text-white/40 uppercase">Scaffold Type</div>
+                    <div className="text-white/80">M13mp18 (7249 nt)</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-white/40 uppercase">Fabrication Stage</div>
+                    <div className="text-white/80">Scaffold Preparation</div>
+                  </div>
+                </div>
+                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-blue-300/60">
+                  [04:42:00] Scaffold Linearization: COMPLETE<br/>
+                  [04:48:00] Staple Synthesis: 18/214 DONE
+                </div>
+              </div>
+
+              {/* Thread 2: CAR-T R&D */}
+              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-magenta-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <Shield className="w-4 h-4" /> Thread 2: In Vivo CAR-T R&D
+                  </h4>
+                  <span className="text-[10px] text-magenta-400 font-mono">IN SILICO ACTIVE</span>
+                </div>
+                <div className="space-y-2">
+                  <div className="text-[10px] text-white/60 uppercase leading-relaxed">
+                    Targeting CD19+ B-ALL via Triplex Shield delivery of multicistronic CAR construct.
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="px-2 py-0.5 bg-magenta-500/10 text-magenta-400 text-[8px] rounded border border-magenta-500/20">400x COST REDUCTION</span>
+                    <span className="px-2 py-0.5 bg-magenta-500/10 text-magenta-400 text-[8px] rounded border border-magenta-500/20">200x FASTER MFG</span>
+                  </div>
+                </div>
+                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-magenta-300/60">
+                  [04:55:03] CAR-T Program: In Silico Engineering Active.<br/>
+                  [04:55:04] Design Architecture: CD19 scFv + IL-15 + iCasp9.
+                </div>
+              </div>
+
+              {/* Thread 3: FDA Package */}
+              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <FileText className="w-4 h-4" /> Thread 3: FDA Package (RMAT)
+                  </h4>
+                  <span className="text-[10px] text-emerald-400 font-mono">72% CMC / 45% CLINICAL</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[9px] uppercase text-white/40 mb-1">
+                      <span>CMC Progress</span>
+                      <span>72%</span>
+                    </div>
+                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 w-[72%]" />
+                    </div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-[9px] uppercase text-white/40 mb-1">
+                      <span>Clinical Protocol</span>
+                      <span>45%</span>
+                    </div>
+                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                      <div className="h-full bg-emerald-500 w-[45%]" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-emerald-300/60">
+                  [04:55:04] FDA Package: Section 3.2.P.5 Updated.<br/>
+                  [04:55:05] Phase I Study: 3+3 Dose Escalation Finalized.
+                </div>
+              </div>
+
+              {/* Thread 4: SpaceX Logistics */}
+              <div className="p-6 border border-white/10 rounded-xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-yellow-400 font-bold uppercase tracking-widest text-sm flex items-center gap-2">
+                    <Rocket className="w-4 h-4" /> Thread 4: SpaceX Transporter-26
+                  </h4>
+                  <span className="text-[10px] text-yellow-400 font-mono">PDR PREP ACTIVE</span>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-[10px] font-mono">
+                  <div className="space-y-1">
+                    <div className="text-white/40 uppercase">Payload Mass</div>
+                    <div className="text-white/80">12.4 kg (6U)</div>
+                  </div>
+                  <div className="space-y-1">
+                    <div className="text-white/40 uppercase">Launch Window</div>
+                    <div className="text-white/80">NET October 2026</div>
+                  </div>
+                </div>
+                <div className="p-3 bg-black/40 rounded border border-white/5 font-mono text-[9px] text-yellow-300/60">
+                  [04:55:05] SpaceX Mission: PDR Agenda Finalized.<br/>
+                  [04:55:06] Integration: D-Orbit OTV Hand-off Confirmed.
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-8 flex justify-center gap-4">
+              <button className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-white/10">
+                Download Full Telemetry Log
+              </button>
+              <button className="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-cyan-500/30">
+                Contact Tilibit Support
+              </button>
             </div>
           </div>
         </motion.div>
@@ -374,6 +531,14 @@ export const ManifestationProtocol: React.FC = () => {
               <div className="text-cyan-400">[04:30:00] DEPLOYMENT AUTHORIZATION RECEIVED.</div>
               <div className="text-cyan-400">[04:30:01] BATCH #001 COMMANDS SEQUENCED.</div>
               <div className="text-cyan-400">[04:30:02] STANDING BY FOR PHYSICAL DEPLOYMENT...</div>
+            </>
+          )}
+          {isExecuting && (
+            <>
+              <div className="text-cyan-400">[04:30:15] EXECUTING: PHASE 1 -- GENERATE-PO TILIBIT_NANOSYSTEMS</div>
+              <div className="text-emerald-400">[04:30:17] 5G SCALE FABRICATION INITIATED.</div>
+              <div className="text-white/60">[04:30:18] REALITY STABILITY: 99.97% | COHERENCE: 0.9998</div>
+              <div className="text-emerald-400">[04:30:20] GENESIS BREAKTHROUGH SECURED.</div>
             </>
           )}
         </div>
