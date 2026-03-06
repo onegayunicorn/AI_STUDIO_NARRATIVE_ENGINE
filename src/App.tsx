@@ -17,7 +17,8 @@ import {
   Globe,
   Palette,
   Box,
-  Cpu
+  Cpu,
+  Brain
 } from 'lucide-react';
 import { TripleHelix } from './components/TripleHelix';
 import { SimFold } from './components/SimFold';
@@ -28,6 +29,7 @@ import { CoralSourcing } from './components/CoralSourcing';
 import { HelixDesign } from './components/HelixDesign';
 import { DNAOrigamiTest } from './components/DNAOrigamiTest';
 import { ManifestationProtocol } from './components/ManifestationProtocol';
+import { BCIResearch } from './components/BCIResearch';
 import { cn } from './utils';
 
 export default function App() {
@@ -41,6 +43,7 @@ export default function App() {
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'origami', icon: Box, label: 'DNA Origami' },
     { id: 'manifest', icon: Cpu, label: 'Manifestation' },
+    { id: 'bci', icon: Brain, label: 'BCI R&D' },
     { id: 'space', icon: Rocket, label: 'Space Logistics' },
     { id: 'coral', icon: Globe, label: 'Coral Sourcing' },
     { id: 'helix', icon: Palette, label: 'Helix Design' },
@@ -124,6 +127,7 @@ export default function App() {
               {activeTab === 'dashboard' ? 'Execution Control Center' : 
                activeTab === 'origami' ? 'DNA Origami Delivery Test' :
                activeTab === 'manifest' ? 'Manifestation Protocol' :
+               activeTab === 'bci' ? 'Neural Nanotether R&D' :
                activeTab === 'space' ? 'Space Logistics Intelligence' :
                activeTab === 'coral' ? 'Coral Guardian Sourcing' :
                activeTab === 'helix' ? 'Triple Helix Design Lab' : 'Simulation Core'}
@@ -132,6 +136,7 @@ export default function App() {
               {activeTab === 'dashboard' ? 'Protocol: FULFILLMENT_V1.0 · Phase: EXECUTION' : 
                activeTab === 'origami' ? 'Phase 2: Triplex Shield Delivery · Active' :
                activeTab === 'manifest' ? 'Final Command Selection · Reality Manifestation' :
+               activeTab === 'bci' ? 'Phase 5: Brain-Computer Interface · In Silico' :
                'Operational Intelligence · B2B Integration Active'}
             </p>
           </div>
@@ -193,6 +198,7 @@ export default function App() {
         {activeTab === 'space' && <SpaceLogistics />}
         {activeTab === 'origami' && <DNAOrigamiTest />}
         {activeTab === 'manifest' && <ManifestationProtocol />}
+        {activeTab === 'bci' && <BCIResearch />}
         {activeTab === 'coral' && <CoralSourcing />}
         {activeTab === 'helix' && <HelixDesign />}
         {activeTab === 'simulation' && (

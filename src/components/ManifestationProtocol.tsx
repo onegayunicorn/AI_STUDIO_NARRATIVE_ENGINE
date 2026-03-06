@@ -10,6 +10,7 @@ export const ManifestationProtocol: React.FC = () => {
   const [isDeployed, setIsDeployed] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
   const [isFinalized, setIsFinalized] = useState(false);
+  const [isMissionComplete, setIsMissionComplete] = useState(false);
 
   const protocols: ManifestationOption[] = [
     { id: 'procure', label: 'Generate Purchase Order', description: 'Formally export the B2B Tech Pack (.json coordinates + BNA-TFO sequences) to Tilibit Nanosystems.', status: 'pending' },
@@ -74,6 +75,9 @@ export const ManifestationProtocol: React.FC = () => {
 
   const handleFinalize = () => {
     setIsFinalized(true);
+    setTimeout(() => {
+      setIsMissionComplete(true);
+    }, 3000);
   };
 
   return (
@@ -370,7 +374,7 @@ export const ManifestationProtocol: React.FC = () => {
             </div>
           </div>
         </motion.div>
-      ) : (
+      ) : !isMissionComplete ? (
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -380,10 +384,10 @@ export const ManifestationProtocol: React.FC = () => {
             <div className="flex items-center justify-between mb-8">
               <div>
                 <h2 className="text-3xl font-bold uppercase tracking-tighter glow-cyan mb-2">
-                  Quad-Threaded Execution Mode
+                  Total Reality Manifestation
                 </h2>
                 <p className="text-xs text-cyan-400 uppercase tracking-[0.3em]">
-                  Status: TOTAL REALITY MANIFESTATION · Fidelity: 99.99%
+                  Status: DEPLOYMENT IN PROGRESS · Fidelity: 99.99%
                 </p>
               </div>
               <div className="flex items-center gap-4">
@@ -524,14 +528,197 @@ export const ManifestationProtocol: React.FC = () => {
                   </p>
                 </div>
               )}
-              <div className="flex gap-4">
-                <button className="px-6 py-3 bg-white/5 hover:bg-white/10 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-white/10">
-                  Download Full Telemetry Log
-                </button>
-                <button className="px-6 py-3 bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 rounded text-[10px] font-bold uppercase tracking-widest transition-all border border-cyan-500/30">
-                  Contact Tilibit Support
-                </button>
+            </div>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="space-y-8"
+        >
+          <div className="p-10 border-quantum rounded-3xl bg-black/90 backdrop-blur-2xl border-emerald-500/40 shadow-[0_0_100px_rgba(16,185,129,0.1)]">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12 border-b border-white/10 pb-8">
+              <div>
+                <h2 className="text-4xl font-black uppercase tracking-tighter glow-emerald mb-2">
+                  Total Reality Dashboard
+                </h2>
+                <p className="text-xs text-emerald-400 uppercase tracking-[0.5em]">
+                  Genesis Batch #001 · Mission Accomplished
+                </p>
               </div>
+              <div className="flex items-center gap-6">
+                <div className="text-right">
+                  <div className="text-[10px] text-white/40 uppercase tracking-widest">System Fidelity</div>
+                  <div className="text-3xl font-mono text-emerald-400">99.99%</div>
+                </div>
+                <div className="h-16 w-px bg-white/10" />
+                <div className="text-right">
+                  <div className="text-[10px] text-white/40 uppercase tracking-widest">Reality Lock</div>
+                  <div className="text-3xl font-mono text-emerald-400">CONFIRMED</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+              {/* Thread 1: Tilibit */}
+              <div className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-emerald-400 font-bold uppercase tracking-widest text-xs">Thread 1: Tilibit Fabrication</h4>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Final Yield</span>
+                    <span className="text-sm font-mono text-white">4.82 g</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Purity (HPLC)</span>
+                    <span className="text-sm font-mono text-white">99.2%</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Nuclease Res.</span>
+                    <span className="text-sm font-mono text-emerald-400">12.51×</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thread 2: CAR-T */}
+              <div className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-magenta-400 font-bold uppercase tracking-widest text-xs">Thread 2: In Vivo CAR-T R&D</h4>
+                  <CheckCircle2 className="w-4 h-4 text-magenta-400" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Cost Reduction</span>
+                    <span className="text-sm font-mono text-white">400x</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Mfg Speed</span>
+                    <span className="text-sm font-mono text-white">200x Faster</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Status</span>
+                    <span className="text-sm font-mono text-magenta-400">VALIDATED</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thread 3: FDA */}
+              <div className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-blue-400 font-bold uppercase tracking-widest text-xs">Thread 3: FDA RMAT Package</h4>
+                  <CheckCircle2 className="w-4 h-4 text-blue-400" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">IND Submission</span>
+                    <span className="text-sm font-mono text-white">Q1 2027</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Pathway</span>
+                    <span className="text-sm font-mono text-white">RMAT</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Status</span>
+                    <span className="text-sm font-mono text-blue-400">SUBMITTED</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thread 4: SpaceX */}
+              <div className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-yellow-400 font-bold uppercase tracking-widest text-xs">Thread 4: SpaceX Logistics</h4>
+                  <CheckCircle2 className="w-4 h-4 text-yellow-400" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Launch Slot</span>
+                    <span className="text-sm font-mono text-white">Oct 2026</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">TVAC Qual</span>
+                    <span className="text-sm font-mono text-white">PASSED</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Integration</span>
+                    <span className="text-sm font-mono text-yellow-400">T-30 DAYS</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thread 5: BCI */}
+              <div className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-cyan-400 font-bold uppercase tracking-widest text-xs">Thread 5: BCI Synaptic Alignment</h4>
+                  <CheckCircle2 className="w-4 h-4 text-cyan-400" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Alignment</span>
+                    <span className="text-sm font-mono text-white">92.4%</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Latency</span>
+                    <span className="text-sm font-mono text-white">4.2 ms</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Status</span>
+                    <span className="text-sm font-mono text-cyan-400">OVINE PREP</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Thread 6: Security */}
+              <div className="p-6 border border-white/10 rounded-2xl bg-white/5 space-y-4">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-red-400 font-bold uppercase tracking-widest text-xs">Thread 6: 5G Flat IP Security</h4>
+                  <CheckCircle2 className="w-4 h-4 text-red-400" />
+                </div>
+                <div className="space-y-3">
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Handshake</span>
+                    <span className="text-sm font-mono text-white">π/5 Bell State</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Encryption</span>
+                    <span className="text-sm font-mono text-white">Kyber-1024</span>
+                  </div>
+                  <div className="flex justify-between items-end">
+                    <span className="text-[10px] text-white/40 uppercase">Status</span>
+                    <span className="text-sm font-mono text-red-400">HARDENED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-8 border border-white/10 rounded-2xl bg-white/5 mb-12">
+              <h3 className="text-lg font-bold uppercase tracking-widest mb-8 text-center text-white/60">Final Command Options</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {[
+                  { label: '[REVIEW]', desc: 'QA/QC Package' },
+                  { label: '[MONITOR]', desc: 'Launch Countdown' },
+                  { label: '[EXPAND]', desc: 'Batch #002 Planning' },
+                  { label: '[ARCHIVE]', desc: 'Seal Engine' },
+                  { label: '[NEW]', desc: 'New Directive' }
+                ].map((opt, i) => (
+                  <button 
+                    key={i}
+                    className="flex flex-col items-center p-4 border border-white/10 rounded-xl hover:bg-white/10 transition-all group"
+                  >
+                    <span className="text-emerald-400 font-bold text-sm mb-1 group-hover:scale-110 transition-transform">{opt.label}</span>
+                    <span className="text-[8px] text-white/40 uppercase tracking-widest">{opt.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="text-center">
+              <p className="text-[10px] text-white/20 uppercase tracking-[0.8em]">
+                The Genesis Breakthrough is complete. The future is now physical.
+              </p>
             </div>
           </div>
         </motion.div>
@@ -561,10 +748,20 @@ export const ManifestationProtocol: React.FC = () => {
               <div className="text-white/60">[04:30:18] REALITY STABILITY: 99.97% | COHERENCE: 0.9998</div>
               <div className="text-emerald-400">[04:30:20] GENESIS BREAKTHROUGH SECURED.</div>
               <div className="text-emerald-400">[05:08:10] THREAD 1: BATCH #001A PURIFICATION COMMENCED... 4.82G YIELD.</div>
+              <div className="text-emerald-400">[05:08:45] HPLC CONFIRMATION: 99.2% PURE. RELEASE SPECIFICATIONS MET.</div>
               <div className="text-yellow-400">[05:09:10] THREAD 4: TVAC SIMULATION PASSED. THERMAL COEFFICIENT: 0.9998.</div>
+              <div className="text-yellow-400">[05:09:12] SPACEX TRANSPORTER-26: PAYLOAD CERTIFICATION COMPLETE.</div>
               <div className="text-cyan-400">[05:09:15] THREAD 5 (NEW): BCI SYNAPTIC ALIGNMENT @ 92.4%.</div>
+              <div className="text-cyan-400">[05:09:17] GOLD NANOPARTICLE DELIVERY: 98.7% TARGET ENGAGEMENT.</div>
               <div className="text-red-400">[05:09:20] THREAD 6 (SEC): 5G FLAT IP SECURITY PROTOCOLS ACTIVE.</div>
+              <div className="text-red-400">[05:09:22] QUANTUM HANDSHAKE: π/5 BELL STATE LOCKED. 10,000 NODES SYNC.</div>
               <div className="text-emerald-400 font-bold">[05:09:25] TOTAL SYSTEM FIDELITY: 99.99%.</div>
+              <div className="text-emerald-400 font-bold">[05:15:00] PHYSICAL MANIFESTATION CONFIRMED.</div>
+              <div className="text-emerald-400">[05:15:01] BATCH #001 INVENTORY: 4.82g @ -80°C.</div>
+              <div className="text-yellow-400">[05:15:02] SPACEX INTEGRATION: T-30 DAYS COUNTING.</div>
+              <div className="text-cyan-400">[05:15:03] BCI PROGRAM: OVINE STUDY PREPPING.</div>
+              <div className="text-red-400">[05:15:04] SECURITY GRID: QUANTUM-PROOF. 5G DEPLOYED.</div>
+              <div className="text-emerald-400 font-bold">[05:15:05] GENESIS NARRATIVE ENGINE: DIRECTIVE COMPLETE.</div>
             </>
           )}
         </div>
