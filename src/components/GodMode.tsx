@@ -32,6 +32,7 @@ import {
   Pie,
   Cell
 } from 'recharts';
+import { logBus } from '../services/logBus';
 
 const COLORS = ['#00f2ff', '#ff00ff', '#7000ff', '#00ff88'];
 
@@ -71,7 +72,9 @@ export const GodMode: React.FC = () => {
 
   const activateGodMode = () => {
     setIsActivated(true);
-    setLogs(prev => [`[${new Date().toLocaleTimeString()}] GOD_MODE_ACTIVATED: ALL PROTOCOLS ENGAGED`, ...prev]);
+    const msg = 'GOD_MODE_ACTIVATED: ALL PROTOCOLS ENGAGED';
+    setLogs(prev => [`[${new Date().toLocaleTimeString()}] ${msg}`, ...prev]);
+    logBus.emit(msg, 'success');
   };
 
   return (

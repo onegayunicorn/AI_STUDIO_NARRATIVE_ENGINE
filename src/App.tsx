@@ -27,7 +27,9 @@ import {
   Waves,
   Zap,
   Shield,
-  EyeOff
+  EyeOff,
+  Search,
+  Infinity as InfinityIcon
 } from 'lucide-react';
 import { TripleHelix } from './components/TripleHelix';
 import { SimFold } from './components/SimFold';
@@ -50,6 +52,9 @@ import { BrainwaveAnalysis } from './components/BrainwaveAnalysis';
 import { GodMode } from './components/GodMode';
 import { PrestoEngine } from './components/PrestoEngine';
 import { InvisiblePressure } from './components/InvisiblePressure';
+import { TruthSeeker } from './components/TruthSeeker';
+import { QuantumNexus } from './components/QuantumNexus';
+import { SystemLog } from './components/SystemLog';
 import { cn } from './utils';
 
 export default function App() {
@@ -73,6 +78,8 @@ export default function App() {
     { id: 'brainwave', icon: Activity, label: 'Brainwaves' },
     { id: 'presto', icon: Cpu, label: 'Presto Engine' },
     { id: 'pressure', icon: EyeOff, label: 'IPT Sensor' },
+    { id: 'truth', icon: Search, label: 'Truth Seeker' },
+    { id: 'nexus', icon: InfinityIcon, label: 'Quantum Nexus' },
     { id: 'godmode', icon: Shield, label: 'God Mode' },
     { id: 'bci', icon: Brain, label: 'BCI R&D' },
     { id: 'space', icon: Rocket, label: 'Space Logistics' },
@@ -168,6 +175,8 @@ export default function App() {
                activeTab === 'brainwave' ? 'Neural Brainwave Analysis' :
                activeTab === 'presto' ? 'Presto Engine: Synaptic Mapping' :
                activeTab === 'pressure' ? 'Invisible Pressure Tracking (IPT)' :
+               activeTab === 'truth' ? 'Truth Seeker Protocols' :
+               activeTab === 'nexus' ? 'Quantum Multiversal Nexus' :
                activeTab === 'godmode' ? 'Nexus Core: God Mode Activated' :
                activeTab === 'bci' ? 'Neural Nanotether R&D' :
                activeTab === 'space' ? 'Space Logistics Intelligence' :
@@ -188,6 +197,8 @@ export default function App() {
                activeTab === 'brainwave' ? 'Synaptic Frequency Mapping · Presto Engine' :
                activeTab === 'presto' ? 'Real-time Neural Synchronization · OS-Nexus' :
                activeTab === 'pressure' ? 'Invisible Pressure Sensor · Biometric Tracking' :
+               activeTab === 'truth' ? 'Operational Excellence · Pragmatic Directives' :
+               activeTab === 'nexus' ? 'Hyperfusion Core · All Simulations Complete' :
                activeTab === 'godmode' ? 'Sovereign Architect Control · Entanglement Wealth' :
                activeTab === 'bci' ? 'Phase 5: Brain-Computer Interface · In Silico' :
                'Operational Intelligence · B2B Integration Active'}
@@ -261,6 +272,8 @@ export default function App() {
         {activeTab === 'brainwave' && <BrainwaveAnalysis />}
         {activeTab === 'presto' && <PrestoEngine />}
         {activeTab === 'pressure' && <InvisiblePressure />}
+        {activeTab === 'truth' && <TruthSeeker />}
+        {activeTab === 'nexus' && <QuantumNexus />}
         {activeTab === 'godmode' && <GodMode />}
         {activeTab === 'bci' && <BCIResearch />}
         {activeTab === 'coral' && <CoralSourcing />}
@@ -277,18 +290,8 @@ export default function App() {
         )}
 
         {/* Terminal / Logs Footer */}
-        <footer className="mt-12 p-6 glass-panel border border-white/10 rounded-xl font-mono text-[10px] text-white/40">
-          <div className="flex items-center gap-2 mb-4 text-cyan-400">
-            <Terminal className="w-3 h-3" />
-            <span className="uppercase font-bold">System Manifest</span>
-          </div>
-          <div className="space-y-1">
-            <div>[02:56:40] INITIALIZING QUANTUM NARRATIVE ENGINE...</div>
-            <div>[02:56:41] ENTANGLING 8,470,000 STATES...</div>
-            <div>[02:56:42] 4-FOLD SIMFOLD PROTOCOL ENGAGED.</div>
-            <div>[02:56:43] REALITY MANIFESTATION AT 99.97% FIDELITY.</div>
-            <div className="text-cyan-400 animate-pulse">_ WAITING FOR USER INPUT...</div>
-          </div>
+        <footer className="mt-12 p-6 glass-panel border border-white/10 rounded-xl min-h-[200px]">
+          <SystemLog />
         </footer>
       </main>
     </div>

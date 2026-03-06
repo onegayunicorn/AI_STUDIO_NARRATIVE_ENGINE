@@ -14,9 +14,13 @@ import {
   Terminal,
   Lock,
   RefreshCw,
-  AlertCircle
+  AlertCircle,
+  Download,
+  FileJson,
+  FileSpreadsheet
 } from 'lucide-react';
 import { cn } from '../utils';
+import { logBus } from '../services/logBus';
 
 interface DataPacket {
   id: string;
@@ -29,6 +33,7 @@ interface DataPacket {
 export const NeuralProxyCollection: React.FC = () => {
   const [isCollecting, setIsCollecting] = useState(false);
   const [packets, setPackets] = useState<DataPacket[]>([]);
+  const [exportBuffer, setExportBuffer] = useState<DataPacket[]>([]);
   const [fluxStability, setFluxStability] = useState(98.4);
   const [syncFidelity, setSyncFidelity] = useState(99.1);
   const [bufferUsage, setBufferUsage] = useState(12);
@@ -39,6 +44,7 @@ export const NeuralProxyCollection: React.FC = () => {
 
   useEffect(() => {
     if (isCollecting) {
+      logBus.emit('INGESTION: Neural proxy data stream initiated.', 'success');
       const interval = setInterval(() => {
         const newPacket: DataPacket = {
           id: Math.random().toString(36).substring(7),
@@ -49,14 +55,64 @@ export const NeuralProxyCollection: React.FC = () => {
         };
 
         setPackets(prev => [newPacket, ...prev].slice(0, 10));
+        setExportBuffer(prev => [newPacket, ...prev].slice(0, 1000));
         setTotalPackets(prev => prev + 1);
         setBufferUsage(prev => Math.min(100, prev + 0.1));
         setFluxStability(prev => Math.min(100, Math.max(90, prev + (Math.random() * 0.4 - 0.2))));
         setSyncFidelity(prev => Math.min(100, Math.max(95, prev + (Math.random() * 0.2 - 0.1))));
+
+        // Random log events
+        if (Math.random() > 0.95) {
+          logBus.emit(`NEURAL: Mapping synaptic cluster ${newPacket.id.toUpperCase()}...`, 'neural');
+        }
+        if (Math.random() > 0.98) {
+          logBus.emit('ANOMALY: Magnetic flux variance detected. Auto-correcting.', 'warning');
+        }
       }, 400);
-      return () => clearInterval(interval);
+      return () => {
+        logBus.emit('INGESTION: Neural proxy data stream halted.', 'warning');
+        clearInterval(interval);
+      };
     }
   }, [isCollecting]);
+
+  const exportToJSON = () => {
+    const dataStr = JSON.stringify(exportBuffer, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    const exportFileDefaultName = `neural_proxy_data_${new Date().toISOString()}.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
+  };
+
+  const exportToCSV = () => {
+    if (exportBuffer.length === 0) return;
+    
+    const headers = ['id', 'type', 'timestamp', 'payload', 'integrity'];
+    const csvRows = [
+      headers.join(','),
+      ...exportBuffer.map(p => [
+        p.id,
+        p.type,
+        p.timestamp,
+        p.payload,
+        p.integrity.toFixed(4)
+      ].join(','))
+    ];
+    
+    const csvContent = csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `neural_proxy_data_${new Date().toISOString()}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const stats = [
     { label: 'Flux Stability', value: `${fluxStability.toFixed(2)}%`, icon: Zap, color: 'text-yellow-400' },
@@ -99,6 +155,28 @@ export const NeuralProxyCollection: React.FC = () => {
             >
               {isCollecting ? <><AlertCircle className="w-5 h-5" /> Halt Collection</> : <><Zap className="w-5 h-5" /> Initiate Collection</>}
             </button>
+            
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={exportToJSON}
+                disabled={exportBuffer.length === 0}
+                className="p-4 border border-white/10 rounded-full bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed group relative"
+                title="Export JSON"
+              >
+                <FileJson className="w-5 h-5 text-cyan-400" />
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[8px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase whitespace-nowrap">Export JSON</span>
+              </button>
+              <button 
+                onClick={exportToCSV}
+                disabled={exportBuffer.length === 0}
+                className="p-4 border border-white/10 rounded-full bg-white/5 hover:bg-white/10 transition-colors disabled:opacity-30 disabled:cursor-not-allowed group relative"
+                title="Export CSV"
+              >
+                <FileSpreadsheet className="w-5 h-5 text-emerald-400" />
+                <span className="absolute -top-8 left-1/2 -translate-x-1/2 bg-black text-[8px] px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none uppercase whitespace-nowrap">Export CSV</span>
+              </button>
+            </div>
+
             <button className="p-4 border border-white/10 rounded-full bg-white/5 hover:bg-white/10 transition-colors">
               <RefreshCw className="w-5 h-5 text-white/60" />
             </button>

@@ -14,6 +14,7 @@ import {
   Crosshair
 } from 'lucide-react';
 import { cn } from '../utils';
+import { logBus } from '../services/logBus';
 
 export const BCICursorController: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
@@ -31,18 +32,14 @@ export const BCICursorController: React.FC = () => {
   const startCalibration = () => {
     setIsCalibrating(true);
     setCalibrationProgress(0);
+    logBus.emit('BCI: Initiating magnetic cord calibration sequence.', 'info');
   };
 
   useEffect(() => {
     if (isCalibrating) {
       const interval = setInterval(() => {
         setCalibrationProgress(prev => {
-          if (prev >= 100) {
-            clearInterval(interval);
-            setIsCalibrating(false);
-            setIsActive(true);
-            return 100;
-          }
+          if (prev >= 100) return 100;
           return prev + 2;
         });
       }, 50);
@@ -50,9 +47,20 @@ export const BCICursorController: React.FC = () => {
     }
   }, [isCalibrating]);
 
+  useEffect(() => {
+    if (isCalibrating && calibrationProgress >= 100) {
+      setIsCalibrating(false);
+      setIsActive(true);
+      logBus.emit('BCI: Neural link established. Motor cortex mapping active.', 'success');
+    }
+  }, [isCalibrating, calibrationProgress]);
+
   // Simulated Neural Cursor Logic
   const updateCursor = useCallback(() => {
     if (!isActive) return;
+
+    let hit = false;
+    let nextTargetPos = targetPos;
 
     setCursorPos(prev => {
       // Add some "neural noise" and magnetic pull towards target
@@ -68,18 +76,24 @@ export const BCICursorController: React.FC = () => {
       // Check for target hit
       const dist = Math.sqrt(Math.pow(newX - targetPos.x, 2) + Math.pow(newY - targetPos.y, 2));
       if (dist < 5) {
-        setScore(s => s + 1);
-        setTargetPos({
-          x: 10 + Math.random() * 80,
-          y: 10 + Math.random() * 80
-        });
+        hit = true;
       }
 
       return { x: newX, y: newY };
     });
 
+    if (hit) {
+      const newTarget = {
+        x: 10 + Math.random() * 80,
+        y: 10 + Math.random() * 80
+      };
+      setScore(s => s + 1);
+      setTargetPos(newTarget);
+      logBus.emit(`BCI: Neural lock confirmed. Score: ${score + 1}`, 'neural');
+    }
+
     requestRef.current = requestAnimationFrame(updateCursor);
-  }, [isActive, targetPos, neuralJitter]);
+  }, [isActive, targetPos, neuralJitter, score]);
 
   useEffect(() => {
     if (isActive) {

@@ -24,6 +24,7 @@ import {
   AreaChart,
   Area
 } from 'recharts';
+import { logBus } from '../services/logBus';
 
 const generateFrequencyData = (baseFreq: number, noise: number) => {
   return Array.from({ length: 50 }, (_, i) => ({
@@ -54,7 +55,13 @@ export const PrestoEngine: React.FC = () => {
   }, [frequency]);
 
   const toggleSync = () => {
-    setIsSyncing(!isSyncing);
+    const nextSync = !isSyncing;
+    setIsSyncing(nextSync);
+    if (nextSync) {
+      logBus.emit('PRESTO: Synaptic frequency synchronization initiated.', 'success');
+    } else {
+      logBus.emit('PRESTO: Synaptic synchronization suspended.', 'warning');
+    }
   };
 
   return (
