@@ -20,7 +20,8 @@ import {
   Microscope,
   Stethoscope,
   Eye,
-  Search
+  Search,
+  AlertTriangle
 } from 'lucide-react';
 import { cn } from '../utils';
 
@@ -31,12 +32,12 @@ export const BCIResearch: React.FC = () => {
   const [testDuration, setTestDuration] = useState(2852); // 47:32 in seconds
 
   const metrics = [
-    { label: 'Synaptic Alignment', value: '92.4%', status: 'optimal', icon: Brain, color: 'text-cyan-400' },
-    { label: 'Signal-to-Noise', value: '28.7 dB', status: 'optimal', icon: BarChart3, color: 'text-emerald-400' },
+    { label: 'Global Coherence', value: '5.8197', status: 'optimal', icon: Brain, color: 'text-cyan-400' },
+    { label: 'Signal-to-Noise', value: '24.3 dB', status: 'optimal', icon: BarChart3, color: 'text-emerald-400' },
     { label: 'Signal Latency', value: '4.2 ms', status: 'optimal', icon: Zap, color: 'text-yellow-400' },
     { label: 'Neural Bandwidth', value: '1.2 Mbps', status: 'optimal', icon: Activity, color: 'text-magenta-400' },
-    { label: 'Node Integrity', value: '99.97%', status: 'optimal', icon: Shield, color: 'text-blue-400' },
-    { label: 'Power Harvest', value: '12.3 µW', status: 'optimal', icon: Battery, color: 'text-orange-400' },
+    { label: 'Alpha Power', value: '0.98', status: 'optimal', icon: Shield, color: 'text-blue-400' },
+    { label: 'Gamma Power', value: '0.72', status: 'warning', icon: Battery, color: 'text-orange-400' },
     { label: 'Thermal Load', value: '37.1°C', status: 'optimal', icon: Thermometer, color: 'text-red-400' },
     { label: 'Packet Loss', value: '0.02%', status: 'optimal', icon: Lock, color: 'text-purple-400' },
   ];
@@ -132,8 +133,10 @@ export const BCIResearch: React.FC = () => {
             <div className="text-[8px] uppercase text-white/40 mb-1 truncate">{metric.label}</div>
             <div className={cn("text-lg font-bold font-mono", metric.color)}>{metric.value}</div>
             <div className="mt-1 flex items-center justify-center gap-1">
-              <div className="w-1 h-1 rounded-full bg-emerald-500" />
-              <span className="text-[6px] uppercase text-emerald-400 font-bold">Stable</span>
+              <div className={cn("w-1 h-1 rounded-full", metric.status === 'warning' ? "bg-yellow-500" : "bg-emerald-500")} />
+              <span className={cn("text-[6px] uppercase font-bold", metric.status === 'warning' ? "text-yellow-500" : "text-emerald-400")}>
+                {metric.status === 'warning' ? 'Action Required' : 'Stable'}
+              </span>
             </div>
           </motion.div>
         ))}
@@ -221,6 +224,15 @@ export const BCIResearch: React.FC = () => {
               <Lock className="w-3 h-3 text-cyan-400" />
             </div>
             <div className="text-[10px] font-mono text-white/60">π/5 Bell State | LOCKED</div>
+          </div>
+          <div className="mt-4 p-4 bg-yellow-500/10 border border-yellow-500/20 rounded-lg">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] uppercase font-bold text-yellow-500">System Recommendation</span>
+              <AlertTriangle className="w-3 h-3 text-yellow-500" />
+            </div>
+            <div className="text-[8px] uppercase font-bold text-white/80 leading-tight">
+              Initiate Gamma Enhancement Protocol to boost 30-100 Hz band power to {'>'}0.80.
+            </div>
           </div>
         </div>
       </div>

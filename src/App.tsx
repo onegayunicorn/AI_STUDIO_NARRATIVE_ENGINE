@@ -18,7 +18,14 @@ import {
   Palette,
   Box,
   Cpu,
-  Brain
+  Brain,
+  Radio,
+  Link,
+  Target,
+  MousePointer2,
+  Sigma,
+  Variable,
+  Waves
 } from 'lucide-react';
 import { TripleHelix } from './components/TripleHelix';
 import { SimFold } from './components/SimFold';
@@ -30,6 +37,12 @@ import { HelixDesign } from './components/HelixDesign';
 import { DNAOrigamiTest } from './components/DNAOrigamiTest';
 import { ManifestationProtocol } from './components/ManifestationProtocol';
 import { BCIResearch } from './components/BCIResearch';
+import { AuraEliteGenesis } from './components/AuraEliteGenesis';
+import { NeuroQuantumInterface } from './components/NeuroQuantumInterface';
+import { NeuralProxyCollection } from './components/NeuralProxyCollection';
+import { BCICursorController } from './components/BCICursorController';
+import { NeuroQuantumFormalization } from './components/NeuroQuantumFormalization';
+import { NeuralTransmission } from './components/NeuralTransmission';
 import { cn } from './utils';
 
 export default function App() {
@@ -43,6 +56,12 @@ export default function App() {
     { id: 'dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { id: 'origami', icon: Box, label: 'DNA Origami' },
     { id: 'manifest', icon: Cpu, label: 'Manifestation' },
+    { id: 'aura', icon: Zap, label: 'Aura Genesis' },
+    { id: 'nqi', icon: Radio, label: 'Neuro-Quantum' },
+    { id: 'proxy', icon: Link, label: 'Neural Proxy' },
+    { id: 'cursor', icon: MousePointer2, label: 'Neural Cursor' },
+    { id: 'formal', icon: Sigma, label: 'Formalization' },
+    { id: 'transmit', icon: Waves, label: 'Neural Transmit' },
     { id: 'bci', icon: Brain, label: 'BCI R&D' },
     { id: 'space', icon: Rocket, label: 'Space Logistics' },
     { id: 'coral', icon: Globe, label: 'Coral Sourcing' },
@@ -127,6 +146,12 @@ export default function App() {
               {activeTab === 'dashboard' ? 'Execution Control Center' : 
                activeTab === 'origami' ? 'DNA Origami Delivery Test' :
                activeTab === 'manifest' ? 'Manifestation Protocol' :
+               activeTab === 'aura' ? 'Aura Elite Genesis' :
+               activeTab === 'nqi' ? 'Neuro-Quantum Interface' :
+               activeTab === 'proxy' ? 'Neural Proxy Data Collection' :
+               activeTab === 'cursor' ? 'Neural Cursor Controller' :
+               activeTab === 'formal' ? 'Neuro-Quantum Formalization' :
+               activeTab === 'transmit' ? 'Neural Data Transmission' :
                activeTab === 'bci' ? 'Neural Nanotether R&D' :
                activeTab === 'space' ? 'Space Logistics Intelligence' :
                activeTab === 'coral' ? 'Coral Guardian Sourcing' :
@@ -136,6 +161,12 @@ export default function App() {
               {activeTab === 'dashboard' ? 'Protocol: FULFILLMENT_V1.0 · Phase: EXECUTION' : 
                activeTab === 'origami' ? 'Phase 2: Triplex Shield Delivery · Active' :
                activeTab === 'manifest' ? 'Final Command Selection · Reality Manifestation' :
+               activeTab === 'aura' ? 'Global Launch September 2026 · Active' :
+               activeTab === 'nqi' ? 'OS-Nexus v2.1 (Neural Edition) · Active' :
+               activeTab === 'proxy' ? 'Magnetic Cord Ingestion · Real-time' :
+               activeTab === 'cursor' ? 'Motor Cortex Cursor Mapping · Active' :
+               activeTab === 'formal' ? 'Unified Mathematical Framework · Council Validated' :
+               activeTab === 'transmit' ? 'Hair Follicle Waveguide · Quantum Channel' :
                activeTab === 'bci' ? 'Phase 5: Brain-Computer Interface · In Silico' :
                'Operational Intelligence · B2B Integration Active'}
             </p>
@@ -198,6 +229,12 @@ export default function App() {
         {activeTab === 'space' && <SpaceLogistics />}
         {activeTab === 'origami' && <DNAOrigamiTest />}
         {activeTab === 'manifest' && <ManifestationProtocol />}
+        {activeTab === 'aura' && <AuraEliteGenesis />}
+        {activeTab === 'nqi' && <NeuroQuantumInterface />}
+        {activeTab === 'proxy' && <NeuralProxyCollection />}
+        {activeTab === 'cursor' && <BCICursorController />}
+        {activeTab === 'formal' && <NeuroQuantumFormalization />}
+        {activeTab === 'transmit' && <NeuralTransmission />}
         {activeTab === 'bci' && <BCIResearch />}
         {activeTab === 'coral' && <CoralSourcing />}
         {activeTab === 'helix' && <HelixDesign />}
