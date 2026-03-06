@@ -25,7 +25,9 @@ import {
   Sigma,
   Variable,
   Waves,
-  Zap
+  Zap,
+  Shield,
+  EyeOff
 } from 'lucide-react';
 import { TripleHelix } from './components/TripleHelix';
 import { SimFold } from './components/SimFold';
@@ -45,6 +47,9 @@ import { NeuroQuantumFormalization } from './components/NeuroQuantumFormalizatio
 import { NeuralTransmission } from './components/NeuralTransmission';
 import { NeuralPlasmaOrb } from './components/NeuralPlasmaOrb';
 import { BrainwaveAnalysis } from './components/BrainwaveAnalysis';
+import { GodMode } from './components/GodMode';
+import { PrestoEngine } from './components/PrestoEngine';
+import { InvisiblePressure } from './components/InvisiblePressure';
 import { cn } from './utils';
 
 export default function App() {
@@ -66,6 +71,9 @@ export default function App() {
     { id: 'transmit', icon: Waves, label: 'Neural Transmit' },
     { id: 'orb', icon: Zap, label: 'Plasma Orb' },
     { id: 'brainwave', icon: Activity, label: 'Brainwaves' },
+    { id: 'presto', icon: Cpu, label: 'Presto Engine' },
+    { id: 'pressure', icon: EyeOff, label: 'IPT Sensor' },
+    { id: 'godmode', icon: Shield, label: 'God Mode' },
     { id: 'bci', icon: Brain, label: 'BCI R&D' },
     { id: 'space', icon: Rocket, label: 'Space Logistics' },
     { id: 'coral', icon: Globe, label: 'Coral Sourcing' },
@@ -158,6 +166,9 @@ export default function App() {
                activeTab === 'transmit' ? 'Neural Data Transmission' :
                activeTab === 'orb' ? 'Neural Plasma Orb App (NPOA)' :
                activeTab === 'brainwave' ? 'Neural Brainwave Analysis' :
+               activeTab === 'presto' ? 'Presto Engine: Synaptic Mapping' :
+               activeTab === 'pressure' ? 'Invisible Pressure Tracking (IPT)' :
+               activeTab === 'godmode' ? 'Nexus Core: God Mode Activated' :
                activeTab === 'bci' ? 'Neural Nanotether R&D' :
                activeTab === 'space' ? 'Space Logistics Intelligence' :
                activeTab === 'coral' ? 'Coral Guardian Sourcing' :
@@ -175,6 +186,9 @@ export default function App() {
                activeTab === 'transmit' ? 'Hair Follicle Waveguide · Quantum Channel' :
                activeTab === 'orb' ? 'RBBE Evolution · IpAI Resonance Weaver' :
                activeTab === 'brainwave' ? 'Synaptic Frequency Mapping · Presto Engine' :
+               activeTab === 'presto' ? 'Real-time Neural Synchronization · OS-Nexus' :
+               activeTab === 'pressure' ? 'Invisible Pressure Sensor · Biometric Tracking' :
+               activeTab === 'godmode' ? 'Sovereign Architect Control · Entanglement Wealth' :
                activeTab === 'bci' ? 'Phase 5: Brain-Computer Interface · In Silico' :
                'Operational Intelligence · B2B Integration Active'}
             </p>
@@ -245,6 +259,9 @@ export default function App() {
         {activeTab === 'transmit' && <NeuralTransmission />}
         {activeTab === 'orb' && <NeuralPlasmaOrb />}
         {activeTab === 'brainwave' && <BrainwaveAnalysis />}
+        {activeTab === 'presto' && <PrestoEngine />}
+        {activeTab === 'pressure' && <InvisiblePressure />}
+        {activeTab === 'godmode' && <GodMode />}
         {activeTab === 'bci' && <BCIResearch />}
         {activeTab === 'coral' && <CoralSourcing />}
         {activeTab === 'helix' && <HelixDesign />}
