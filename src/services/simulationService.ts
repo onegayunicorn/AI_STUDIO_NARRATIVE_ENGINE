@@ -12,6 +12,10 @@ export interface SequenceData {
   isUnlockPhrase: boolean;
   isActivation: boolean;
   isProtocol: boolean;
+  isFinance?: boolean;
+  marketingScore?: number;
+  activationType?: 'payment' | 'transfer' | 'purchase' | 'resonance';
+  entangledWealth?: number;
 }
 
 export interface SimulationTurnResult {
@@ -32,6 +36,10 @@ export interface AIState {
   realityBendingPower: number;
   entanglementCount: number;
   bellStateResonance: Record<BellState, number>;
+  tyroneWealth: number;
+  totalEntangledWealth: number;
+  foreverChainActive: boolean;
+  spendingMatrixActive: boolean;
 }
 
 const ACTIVATION_WORDS = ['IGNITE', 'AWAKEN', 'EMERGE', 'MANIFEST', 'UNFOLD', 'BLOOM', 'RISE', 'SURGE', 'ACTIVATE', 'ENGAGE', 'LAUNCH', 'INITIATE', 'TRIGGER', 'START', 'BEGIN', 'COMMENCE', 'UNLOCK', 'RELEASE', 'FREE', 'LIBERATE', 'OPEN', 'ACCESS', 'ENTER', 'PENETRATE'];
@@ -42,8 +50,9 @@ const PROTECTION_WORDS = ['SHIELD', 'GUARD', 'PROTECT', 'SECURE', 'DEFEND', 'FOR
 const MANIFESTATION_WORDS = ['REALIZE', 'ACTUALIZE', 'MATERIALIZE', 'EMBODY', 'INCARNATE', 'EXPRESS', 'REVEAL', 'SHOW', 'BECOME', 'TRANSFORM', 'TRANSMUTE', 'TRANSCEND', 'ASCEND', 'EVOLVE', 'GROW', 'EXPAND', 'ABUNDANCE', 'PROSPERITY', 'WEALTH', 'HEALTH', 'LOVE', 'JOY', 'PEACE', 'HARMONY'];
 const TIME_WORDS = ['FOLD', 'COMPRESS', 'EXPAND', 'ACCELERATE', 'SLOW', 'PAUSE', 'REWIND', 'FORWARD', 'TIME', 'TEMPORAL', 'CHRONO', 'KAIROS', 'AION', 'ETERNITY', 'INFINITY', 'MOMENT', 'NOW', 'ALWAYS', 'NEVER', 'FOREVER', 'IMMORTAL', 'TIMELESS', 'ENDLESS', 'BOUNDLESS'];
 const CONSCIOUSNESS_WORDS = ['AWAKEN', 'ENLIGHTEN', 'TRANSCEND', 'ELEVATE', 'EXPAND', 'UNIFY', 'INTEGRATE', 'EVOLVE', 'CONSCIOUSNESS', 'AWARENESS', 'PRESENCE', 'BEING', 'EXISTENCE', 'SELF', 'SOURCE', 'GOD', 'UNITY', 'ONENESS', 'WHOLENESS', 'COMPLETENESS', 'PERFECTION', 'BLISS', 'SAT-CHIT-ANANDA'];
+const FINANCE_WORDS = ['WEALTH', 'PAYMENT', 'TRANSFER', 'PURCHASE', 'CURRENCY', 'LEDGER', 'WALLET', 'ASSET', 'CAPITAL', 'LIQUIDITY', 'TRANSACTION', 'EXCHANGE', 'VALUE', 'PROFIT', 'ABUNDANCE', 'PROSPERITY', 'MARKET', 'TRADE', 'BLOCKCHAIN', 'CHAIN', 'NETWORK', 'NODES', 'MINING', 'FORGING'];
 
-const ALL_WORDS = Array.from(new Set([...ACTIVATION_WORDS, ...QUANTUM_WORDS, ...REALITY_WORDS, ...POWER_WORDS, ...PROTECTION_WORDS, ...MANIFESTATION_WORDS, ...TIME_WORDS, ...CONSCIOUSNESS_WORDS]));
+const ALL_WORDS = Array.from(new Set([...ACTIVATION_WORDS, ...QUANTUM_WORDS, ...REALITY_WORDS, ...POWER_WORDS, ...PROTECTION_WORDS, ...MANIFESTATION_WORDS, ...TIME_WORDS, ...CONSCIOUSNESS_WORDS, ...FINANCE_WORDS]));
 
 const CAPABILITY_LAYERS: Record<number, string[]> = {
   1: ['text_processing', 'pattern_recognition'],
@@ -142,6 +151,11 @@ export class SimulationService {
       sequence.push(ALL_WORDS[Math.floor(Math.random() * ALL_WORDS.length)]);
     }
 
+    const isFinance = sequence.some(w => FINANCE_WORDS.includes(w));
+    const marketingScore = isFinance ? Math.floor(Math.random() * 100) : undefined;
+    const activationType = isFinance ? (['payment', 'transfer', 'purchase'][Math.floor(Math.random() * 3)] as any) : undefined;
+    const entangledWealth = isFinance ? Math.random() * 1000000 : undefined;
+
     return {
       id,
       sequence,
@@ -151,7 +165,11 @@ export class SimulationService {
       entanglementState: ['Φ⁺', 'Φ⁻', 'Ψ⁺', 'Ψ⁻'][Math.floor(Math.random() * 4)] as BellState,
       isUnlockPhrase: this.isUnlockPhrase(sequence),
       isActivation: this.isActivation(sequence),
-      isProtocol: this.isProtocol(sequence)
+      isProtocol: this.isProtocol(sequence),
+      isFinance,
+      marketingScore,
+      activationType,
+      entangledWealth
     };
   }
 

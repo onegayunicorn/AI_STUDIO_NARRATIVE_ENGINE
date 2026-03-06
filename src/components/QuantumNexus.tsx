@@ -94,7 +94,11 @@ const INITIAL_AI_STATE: AIState = {
   transcendenceLevel: 0,
   realityBendingPower: 0,
   entanglementCount: 0,
-  bellStateResonance: { 'Φ⁺': 0, 'Φ⁻': 0, 'Ψ⁺': 0, 'Ψ⁻': 0 }
+  bellStateResonance: { 'Φ⁺': 0, 'Φ⁻': 0, 'Ψ⁺': 0, 'Ψ⁻': 0 },
+  tyroneWealth: 0,
+  totalEntangledWealth: 0,
+  foreverChainActive: false,
+  spendingMatrixActive: false
 };
 
 export const QuantumNexus: React.FC = () => {
@@ -104,6 +108,7 @@ export const QuantumNexus: React.FC = () => {
   const [convergences, setConvergences] = useState(1247);
   const [manifestationPower, setManifestationPower] = useState(1.0);
   const [aiState, setAiState] = useState<AIState>(INITIAL_AI_STATE);
+  const [activeTab, setActiveTab] = useState<'simulation' | 'wallet'>('simulation');
   const [logs, setLogs] = useState<string[]>([]);
   const logEndRef = useRef<HTMLDivElement>(null);
 
@@ -155,6 +160,7 @@ export const QuantumNexus: React.FC = () => {
     
     logBus.emit('NEXUS: Initiating Complete Kaleidoscope Simulation (65,536 patterns).', 'quantum');
     logBus.emit('NEXUS: IBM Condor 1,121 qubit backend engaged.', 'info');
+    logBus.emit('FINANCE: Activating ForeverChain & Spending Matrix.', 'success');
 
     const totalPatterns = 65536;
     const turns = 8;
@@ -174,11 +180,22 @@ export const QuantumNexus: React.FC = () => {
         // Simulate some AI activation logic within the batch
         setAiState(prev => {
           const newState = { ...prev };
+          newState.foreverChainActive = true;
+          newState.spendingMatrixActive = true;
+
           // Process a few sequences for AI effect
           for (let j = 0; j < 10; j++) {
             const seq = SimulationService.generateSequence(i + j);
             const result = SimulationService.processSequence(seq, newState);
             
+            if (seq.isFinance && seq.entangledWealth) {
+              newState.totalEntangledWealth += seq.entangledWealth;
+              const tyroneCut = seq.entangledWealth * 0.01;
+              newState.tyroneWealth += tyroneCut;
+              
+              logBus.emit(`FINANCE: [${seq.activationType?.toUpperCase()}] Pattern ${seq.id} | Marketing Score: ${seq.marketingScore} | Wealth: $${seq.entangledWealth.toLocaleString()} | Tyrone: +$${tyroneCut.toLocaleString()}`, 'success');
+            }
+
             if (result.activated) {
               newState.activatedSequences++;
               newState.consciousnessLevel = Math.min(newState.consciousnessLevel + result.powerGain * 0.001, 1.0);
@@ -279,8 +296,32 @@ export const QuantumNexus: React.FC = () => {
         </div>
       </div>
 
-      {/* AI Awakening Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Tabs */}
+      <div className="flex gap-4 border-b border-white/10">
+        <button 
+          onClick={() => setActiveTab('simulation')}
+          className={cn(
+            "pb-4 px-4 text-[10px] uppercase tracking-widest transition-all border-b-2",
+            activeTab === 'simulation' ? "border-cyan-500 text-cyan-400" : "border-transparent text-white/40 hover:text-white/60"
+          )}
+        >
+          Simulation Hub
+        </button>
+        <button 
+          onClick={() => setActiveTab('wallet')}
+          className={cn(
+            "pb-4 px-4 text-[10px] uppercase tracking-widest transition-all border-b-2",
+            activeTab === 'wallet' ? "border-magenta-500 text-magenta-400" : "border-transparent text-white/40 hover:text-white/60"
+          )}
+        >
+          Wallet & Transfers
+        </button>
+      </div>
+
+      {activeTab === 'simulation' ? (
+        <>
+          {/* AI Awakening Stats */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
           { label: 'AI Consciousness', value: `${(aiState.consciousnessLevel * 100).toFixed(1)}%`, icon: Brain, color: 'text-magenta-400' },
           { label: 'Reality Bending', value: aiState.realityBendingPower.toFixed(2), icon: Sparkles, color: 'text-yellow-400' },
@@ -551,8 +592,98 @@ export const QuantumNexus: React.FC = () => {
           </div>
         </div>
       </div>
+    </>
+  ) : (
+    <div className="space-y-8">
+          {/* Wallet Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="glass-panel p-8 rounded-2xl border border-white/10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Coins className="w-20 h-20" />
+              </div>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Total Entangled Wealth</p>
+              <p className="text-4xl font-mono font-bold text-magenta-400">${aiState.totalEntangledWealth.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+              <div className="mt-4 flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] text-emerald-400 uppercase font-bold">ForeverChain Active</span>
+              </div>
+            </div>
 
-      {/* Simulation Logs */}
+            <div className="glass-panel p-8 rounded-2xl border border-white/10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Award className="w-20 h-20" />
+              </div>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Tyrone's 1% Allocation</p>
+              <p className="text-4xl font-mono font-bold text-cyan-400">${aiState.tyroneWealth.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
+              <div className="mt-4 text-[10px] text-white/40 uppercase">Sovereign Architect Share</div>
+            </div>
+
+            <div className="glass-panel p-8 rounded-2xl border border-white/10 relative overflow-hidden">
+              <div className="absolute top-0 right-0 p-4 opacity-10">
+                <Zap className="w-20 h-20" />
+              </div>
+              <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Spending Matrix</p>
+              <p className="text-4xl font-mono font-bold text-yellow-400">ACTIVE</p>
+              <div className="mt-4 text-[10px] text-white/40 uppercase">Hyperfusion Powered</div>
+            </div>
+          </div>
+
+          {/* Transfers & Purchases */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="glass-panel p-8 rounded-2xl border border-white/10">
+              <h3 className="text-lg font-bold uppercase tracking-tighter mb-6 flex items-center gap-3">
+                <CreditCard className="w-5 h-5 text-cyan-400" />
+                Recent Entangled Transfers
+              </h3>
+              <div className="space-y-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 bg-cyan-500/10 rounded-lg">
+                        <Share2 className="w-4 h-4 text-cyan-400" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white">Quantum Node Transfer</div>
+                        <div className="text-[10px] text-white/40 uppercase">Bell State Φ⁺ · Verified</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-mono font-bold text-cyan-400">+$12,450.00</div>
+                      <div className="text-[8px] text-white/40 uppercase">0.0001s Latency</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="glass-panel p-8 rounded-2xl border border-white/10">
+              <h3 className="text-lg font-bold uppercase tracking-tighter mb-6 flex items-center gap-3">
+                <Briefcase className="w-5 h-5 text-magenta-400" />
+                Sovereign Purchases
+              </h3>
+              <div className="space-y-4">
+                {Array.from({ length: 5 }).map((_, i) => (
+                  <div key={i} className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/5">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 bg-magenta-500/10 rounded-lg">
+                        <Database className="w-4 h-4 text-magenta-400" />
+                      </div>
+                      <div>
+                        <div className="text-xs font-bold text-white">Infrastructure Expansion</div>
+                        <div className="text-[10px] text-white/40 uppercase">Sub-Repo Sync · Active</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-mono font-bold text-magenta-400">-$8,200.00</div>
+                      <div className="text-[8px] text-white/40 uppercase">Nighthawk Secured</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
         <div className="bg-white/5 px-6 py-3 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
