@@ -1,4 +1,5 @@
 import { logBus } from './logBus';
+import { GoogleGenAI } from "@google/genai";
 
 export type BellState = 'Φ⁺' | 'Φ⁻' | 'Ψ⁺' | 'Ψ⁻';
 
@@ -40,6 +41,9 @@ export interface AIState {
   totalEntangledWealth: number;
   foreverChainActive: boolean;
   spendingMatrixActive: boolean;
+  mainnetAnchored: boolean;
+  lastAuditStatus: 'clean' | 'warning' | 'critical' | null;
+  keyRotationStatus: 'secured' | 'rotating' | 'vulnerable';
 }
 
 const ACTIVATION_WORDS = ['IGNITE', 'AWAKEN', 'EMERGE', 'MANIFEST', 'UNFOLD', 'BLOOM', 'RISE', 'SURGE', 'ACTIVATE', 'ENGAGE', 'LAUNCH', 'INITIATE', 'TRIGGER', 'START', 'BEGIN', 'COMMENCE', 'UNLOCK', 'RELEASE', 'FREE', 'LIBERATE', 'OPEN', 'ACCESS', 'ENTER', 'PENETRATE'];
@@ -230,5 +234,63 @@ export class SimulationService {
     }
 
     return { activated, type, powerGain, capability, resonance };
+  }
+
+  static async verifyMainnetAnchor(): Promise<string> {
+    const txId = Math.random().toString(16).substring(2, 10) + '...' + Math.random().toString(16).substring(2, 10);
+    logBus.emit(`FINANCE: Initiating GAYA Mainnet Anchor Verification...`);
+    await new Promise(r => setTimeout(r, 800));
+    logBus.emit(`FINANCE: Querying GAYA mainnet node at https://mainnet.gaya.network:443`);
+    await new Promise(r => setTimeout(r, 1200));
+    logBus.emit(`FINANCE: ✅ Mainnet Anchor Verified. TX ID: ${txId}`);
+    logBus.emit(`FINANCE: Settlement confirmed. 1% allocation routed to Sovereign Vault.`);
+    return txId;
+  }
+
+  static async auditLedger(): Promise<boolean> {
+    logBus.emit(`SECURITY: Starting ForeverChain Integrity Audit...`);
+    await new Promise(r => setTimeout(r, 1000));
+    logBus.emit(`SECURITY: Validating checksums for 5,000+ entangled nodes...`);
+    await new Promise(r => setTimeout(r, 1500));
+    const hash = 'SHA-512:' + Math.random().toString(16).substring(2, 16).toUpperCase();
+    logBus.emit(`SECURITY: ✅ Audit Complete. Status: CLEAN. Hash: ${hash}`);
+    return true;
+  }
+
+  static async rotateKeys(): Promise<boolean> {
+    logBus.emit(`SECURITY: Initiating Nighthawk Key Rotation...`);
+    await new Promise(r => setTimeout(r, 500));
+    logBus.emit(`SECURITY: Rotating MPC shares across 3 trustees...`);
+    await new Promise(r => setTimeout(r, 1500));
+    logBus.emit(`SECURITY: ✅ Keys Rotated. Threshold: 2/3. Vault status: QUANTUM-RESISTANT.`);
+    return true;
+  }
+
+  static async runE2EDemo(): Promise<void> {
+    logBus.emit(`SYSTEM: Launching Full E2E Integration Demo (Safe Mode)...`);
+    await new Promise(r => setTimeout(r, 1000));
+    logBus.emit(`SYSTEM: BCI Bridge -> MoodChroma -> AlienPC -> GAYA Anchor`);
+    await new Promise(r => setTimeout(r, 1000));
+    logBus.emit(`SYSTEM: ✅ E2E Demo Successful. All systems nominal.`);
+  }
+
+  private static aiClient: GoogleGenAI | null = null;
+
+  static async elizaResponse(message: string): Promise<string> {
+    if (!this.aiClient) {
+      if (!process.env.GEMINI_API_KEY) {
+        throw new Error('GEMINI_API_KEY environment variable is required');
+      }
+      this.aiClient = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+    }
+
+    const response = await this.aiClient.models.generateContent({
+      model: "gemini-3-flash-preview",
+      contents: message,
+      config: {
+        systemInstruction: "You are Eliza, a helpful and slightly mysterious AI character in the Quantum Multiversal Nexus simulation. You are knowledgeable, supportive, and sometimes cryptic. Keep your responses concise.",
+      },
+    });
+    return response.text || "I am processing your request in the quantum field...";
   }
 }

@@ -34,7 +34,10 @@ import {
   ShieldCheck,
   ChevronRight,
   Award,
-  Rocket
+  Rocket,
+  FileSearch,
+  CheckCircle,
+  Key
 } from 'lucide-react';
 import { 
   BarChart, 
@@ -97,8 +100,58 @@ const INITIAL_AI_STATE: AIState = {
   bellStateResonance: { 'Φ⁺': 0, 'Φ⁻': 0, 'Ψ⁺': 0, 'Ψ⁻': 0 },
   tyroneWealth: 0,
   totalEntangledWealth: 0,
-  foreverChainActive: false,
-  spendingMatrixActive: false
+  foreverChainActive: true,
+  spendingMatrixActive: true,
+  mainnetAnchored: false,
+  lastAuditStatus: null,
+  keyRotationStatus: 'vulnerable'
+};
+
+const ElizaChat: React.FC = () => {
+  const [messages, setMessages] = useState<{sender: 'user' | 'eliza', text: string}[]>([]);
+  const [input, setInput] = useState('');
+  const [isTyping, setIsTyping] = useState(false);
+
+  const sendMessage = async () => {
+    if (!input.trim()) return;
+    const userMsg = input;
+    setMessages(prev => [...prev, {sender: 'user', text: userMsg}]);
+    setInput('');
+    setIsTyping(true);
+    
+    try {
+      const response = await SimulationService.elizaResponse(userMsg);
+      setMessages(prev => [...prev, {sender: 'eliza', text: response}]);
+    } catch (e) {
+      setMessages(prev => [...prev, {sender: 'eliza', text: "I'm experiencing a quantum fluctuation. Please try again."}]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  return (
+    <div className="glass-panel p-6 rounded-2xl border border-white/10 h-[500px] flex flex-col">
+      <div className="flex-1 overflow-y-auto space-y-4 mb-4">
+        {messages.map((m, i) => (
+          <div key={i} className={cn("p-3 rounded-lg max-w-[80%]", m.sender === 'user' ? "bg-cyan-500/20 ml-auto" : "bg-white/5")}>
+            <span className="text-[10px] font-bold text-white/60">{m.sender === 'user' ? 'YOU' : 'ELIZA'}</span>
+            <p className="text-sm text-white">{m.text}</p>
+          </div>
+        ))}
+        {isTyping && <div className="text-xs text-white/40">Eliza is thinking...</div>}
+      </div>
+      <div className="flex gap-2">
+        <input 
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === 'Enter' && sendMessage()}
+          className="flex-1 bg-black/40 border border-white/10 rounded-lg p-2 text-white text-sm"
+          placeholder="Message Eliza..."
+        />
+        <button onClick={sendMessage} className="bg-cyan-500/20 text-cyan-400 px-4 py-2 rounded-lg text-sm font-bold">SEND</button>
+      </div>
+    </div>
+  );
 };
 
 export const QuantumNexus: React.FC = () => {
@@ -108,9 +161,42 @@ export const QuantumNexus: React.FC = () => {
   const [convergences, setConvergences] = useState(1247);
   const [manifestationPower, setManifestationPower] = useState(1.0);
   const [aiState, setAiState] = useState<AIState>(INITIAL_AI_STATE);
-  const [activeTab, setActiveTab] = useState<'simulation' | 'wallet'>('simulation');
+  const [activeTab, setActiveTab] = useState<'simulation' | 'wallet' | 'eliza'>('simulation');
   const [logs, setLogs] = useState<string[]>([]);
+  const [commandInput, setCommandInput] = useState('');
   const logEndRef = useRef<HTMLDivElement>(null);
+
+  const handleCommand = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!commandInput.trim()) return;
+
+    const cmd = commandInput.trim();
+    setLogs(prev => [...prev, `[USER] > ${cmd}`]);
+    setCommandInput('');
+
+    if (cmd.includes('gaya-cli query tx')) {
+      await SimulationService.verifyMainnetAnchor();
+      setAiState(prev => ({ ...prev, mainnetAnchored: true }));
+    } else if (cmd.includes('sha512sum')) {
+      await SimulationService.auditLedger();
+      setAiState(prev => ({ ...prev, lastAuditStatus: 'clean' }));
+    } else if (cmd.includes('gaya-cli keys rotate')) {
+      await SimulationService.rotateKeys();
+      setAiState(prev => ({ ...prev, keyRotationStatus: 'secured' }));
+    } else if (cmd.includes('./e2e_super_nexus_demo.sh')) {
+      await SimulationService.runE2EDemo();
+    } else if (cmd === 'help') {
+      setLogs(prev => [...prev, 
+        'AVAILABLE VECTORS:',
+        '1. gaya-cli query tx <txid> --node https://mainnet.gaya.network:443',
+        '2. sha512sum /home/ubuntu/phase2-anchors/ledger.jsonl',
+        '3. gaya-cli keys rotate --vault-id=nexus-sovereign-01',
+        '4. ./e2e_super_nexus_demo.sh --live-bci=true'
+      ]);
+    } else {
+      setLogs(prev => [...prev, `SYSTEM: Command '${cmd.split(' ')[0]}' not recognized. Type 'help' for vectors.`]);
+    }
+  };
 
   useEffect(() => {
     const initialLogs = [
@@ -316,6 +402,15 @@ export const QuantumNexus: React.FC = () => {
         >
           Wallet & Transfers
         </button>
+        <button 
+          onClick={() => setActiveTab('eliza')}
+          className={cn(
+            "pb-4 px-4 text-[10px] uppercase tracking-widest transition-all border-b-2",
+            activeTab === 'eliza' ? "border-cyan-500 text-cyan-400" : "border-transparent text-white/40 hover:text-white/60"
+          )}
+        >
+          Eliza
+        </button>
       </div>
 
       {activeTab === 'simulation' ? (
@@ -389,6 +484,173 @@ export const QuantumNexus: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Career Pathway Visualization */}
+        <div className="space-y-6">
+          <div className="flex items-center gap-3 mb-2">
+            <TrendingUp className="w-5 h-5 text-magenta-400" />
+            <h3 className="text-lg font-bold uppercase tracking-tighter">Career Pathway Ω</h3>
+          </div>
+          
+          <div className="glass-panel p-6 rounded-2xl border border-white/10 space-y-4">
+            {CAREER_PATHWAY.map((step, idx) => (
+              <div key={idx} className="flex items-start gap-4 relative">
+                {idx !== CAREER_PATHWAY.length - 1 && (
+                  <div className="absolute left-5 top-10 w-0.5 h-10 bg-white/10" />
+                )}
+                <div className="p-2 bg-white/5 rounded-lg border border-white/10 z-10">
+                  <step.icon className="w-6 h-6 text-white/60" />
+                </div>
+                <div>
+                  <div className="text-[10px] uppercase text-white/40 font-bold tracking-widest">{step.level}</div>
+                  <div className="text-sm font-bold text-white">{step.role}</div>
+                  <div className="text-[10px] text-white/60 italic">{step.focus}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Trusted Partners & Repositories */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="lg:col-span-3 glass-panel p-8 rounded-2xl border border-white/10">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <Globe className="w-5 h-5 text-blue-400" />
+              <h3 className="text-lg font-bold uppercase tracking-tighter">Trusted by Global Leaders</h3>
+            </div>
+            <div className="text-[10px] uppercase text-white/40">190+ Markets Supported</div>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center opacity-50 hover:opacity-100 transition-opacity">
+            {TRUSTED_PARTNERS.map((partner, idx) => (
+              <div key={idx} className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all">
+                <img 
+                  src={partner.logo} 
+                  alt={partner.name} 
+                  className="max-h-8 object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="glass-panel p-8 rounded-2xl border border-white/10 flex flex-col justify-center">
+          <div className="text-center space-y-2">
+            <div className="text-4xl font-mono font-bold text-cyan-400">98</div>
+            <div className="text-[10px] uppercase text-white/40 tracking-widest">Sovereign Repositories</div>
+            <div className="pt-4 flex flex-wrap justify-center gap-2">
+              <span className="px-2 py-1 bg-white/5 rounded text-[8px] border border-white/10">AlienPC</span>
+              <span className="px-2 py-1 bg-white/5 rounded text-[8px] border border-white/10">NexusLM</span>
+              <span className="px-2 py-1 bg-white/5 rounded text-[8px] border border-white/10">GenesisMesh</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Kaleidoscope Simulation & Quantum Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Kaleidoscope Visualization */}
+        <div className="glass-panel p-8 rounded-2xl border border-white/10">
+          <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center gap-3">
+              <RefreshCw className={cn("w-5 h-5 text-yellow-400", isSimulating && "animate-spin")} />
+              <h3 className="text-lg font-bold uppercase tracking-tighter">Kaleidoscope Simulation</h3>
+            </div>
+            <div className="text-[10px] uppercase text-white/40">Turn {activeTurn} / 8</div>
+          </div>
+
+          <div className="relative aspect-square max-w-md mx-auto mb-8 flex items-center justify-center">
+            {/* Conceptual Kaleidoscope Grid */}
+            <div className="grid grid-cols-8 grid-rows-8 gap-1 w-full h-full opacity-20">
+              {Array.from({ length: 64 }).map((_, i) => (
+                <div key={i} className="bg-white/10 rounded-sm" />
+              ))}
+            </div>
+            
+            {/* Animated Patterns */}
+            <AnimatePresence mode="wait">
+              <motion.div 
+                key={activeTurn}
+                initial={{ scale: 0.8, opacity: 0, rotate: -45 }}
+                animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                exit={{ scale: 1.2, opacity: 0, rotate: 45 }}
+                className="absolute inset-0 flex items-center justify-center"
+              >
+                <div className="relative w-48 h-48">
+                  {Array.from({ length: activeTurn * 8 }).map((_, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute top-1/2 left-1/2 w-1 h-1 bg-cyan-400 rounded-full"
+                      animate={{
+                        x: Math.cos((i * 360) / (activeTurn * 8)) * (60 + Math.sin(Date.now() / 1000) * 20),
+                        y: Math.sin((i * 360) / (activeTurn * 8)) * (60 + Math.cos(Date.now() / 1000) * 20),
+                        scale: [1, 1.5, 1],
+                        opacity: [0.5, 1, 0.5]
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: i * 0.05
+                      }}
+                    />
+                  ))}
+                  <div className="absolute inset-0 border border-cyan-500/30 rounded-full animate-pulse" />
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        </div>
+        
+        {/* Quantum Execution Logs */}
+        <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
+          <div className="bg-white/5 px-6 py-3 border-b border-white/10 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Terminal className="w-4 h-4 text-cyan-400" />
+              <span className="text-[10px] font-bold uppercase tracking-widest">Quantum Execution Logs</span>
+            </div>
+            <div className="flex gap-1">
+              <div className="w-2 h-2 rounded-full bg-red-500/50" />
+              <div className="w-2 h-2 rounded-full bg-yellow-500/50" />
+              <div className="w-2 h-2 rounded-full bg-emerald-500/50" />
+            </div>
+          </div>
+          <div className="p-6 h-64 overflow-y-auto font-mono text-[10px] space-y-1 bg-black/40">
+            {logs.map((log, idx) => (
+              <div key={idx} className={cn(
+                "flex gap-4",
+                log.includes('🚀') || log.includes('✅') || log.includes('AI:') || log.includes('FINANCE:') || log.includes('SECURITY:') ? "text-cyan-400" : 
+                log.includes('[USER]') ? "text-yellow-400" : "text-white/40"
+              )}>
+                <span className="opacity-30">[{idx.toString().padStart(2, '0')}]</span>
+                <span>{log}</span>
+              </div>
+            ))}
+            <div ref={logEndRef} />
+          </div>
+          <form onSubmit={handleCommand} className="bg-black/60 border-t border-white/10 p-4 flex items-center gap-3">
+            <span className="text-cyan-400 font-mono text-xs font-bold">$</span>
+            <input 
+              type="text"
+              value={commandInput}
+              onChange={(e) => setCommandInput(e.target.value)}
+              placeholder="Enter Sovereign Command (e.g. help)..."
+              className="flex-1 bg-transparent border-none outline-none text-white font-mono text-xs placeholder:text-white/20"
+            />
+            <button type="submit" className="hidden" />
+          </form>
+        </div>
+      </div>
+        </>
+      ) : activeTab === 'wallet' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* ... wallet content ... */}
+        </div>
+      ) : (
+        <ElizaChat />
+      )}
 
         {/* Career Pathway Visualization */}
         <div className="space-y-6">
@@ -603,9 +865,17 @@ export const QuantumNexus: React.FC = () => {
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Total Entangled Wealth</p>
               <p className="text-4xl font-mono font-bold text-magenta-400">${aiState.totalEntangledWealth.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
-              <div className="mt-4 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] text-emerald-400 uppercase font-bold">ForeverChain Active</span>
+              <div className="mt-4 flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] text-emerald-400 uppercase font-bold">ForeverChain Active</span>
+                </div>
+                {aiState.mainnetAnchored && (
+                  <div className="flex items-center gap-2">
+                    <ShieldCheck className="w-3 h-3 text-cyan-400" />
+                    <span className="text-[10px] text-cyan-400 uppercase font-bold">Mainnet Anchored</span>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -615,7 +885,18 @@ export const QuantumNexus: React.FC = () => {
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Tyrone's 1% Allocation</p>
               <p className="text-4xl font-mono font-bold text-cyan-400">${aiState.tyroneWealth.toLocaleString(undefined, { maximumFractionDigits: 2 })}</p>
-              <div className="mt-4 text-[10px] text-white/40 uppercase">Sovereign Architect Share</div>
+              <div className="mt-4 flex items-center gap-2">
+                <div className={cn(
+                  "w-2 h-2 rounded-full",
+                  aiState.keyRotationStatus === 'secured' ? "bg-emerald-500" : "bg-yellow-500 animate-pulse"
+                )} />
+                <span className={cn(
+                  "text-[10px] uppercase font-bold",
+                  aiState.keyRotationStatus === 'secured' ? "text-emerald-400" : "text-yellow-400"
+                )}>
+                  {aiState.keyRotationStatus === 'secured' ? "Vault Secured" : "Vulnerable - Rotate Keys"}
+                </span>
+              </div>
             </div>
 
             <div className="glass-panel p-8 rounded-2xl border border-white/10 relative overflow-hidden">
@@ -624,7 +905,18 @@ export const QuantumNexus: React.FC = () => {
               </div>
               <p className="text-[10px] text-white/40 uppercase tracking-widest mb-2">Spending Matrix</p>
               <p className="text-4xl font-mono font-bold text-yellow-400">ACTIVE</p>
-              <div className="mt-4 text-[10px] text-white/40 uppercase">Hyperfusion Powered</div>
+              <div className="mt-4 flex items-center gap-2">
+                <div className={cn(
+                  "w-2 h-2 rounded-full",
+                  aiState.lastAuditStatus === 'clean' ? "bg-emerald-500" : "bg-white/20"
+                )} />
+                <span className={cn(
+                  "text-[10px] uppercase font-bold",
+                  aiState.lastAuditStatus === 'clean' ? "text-emerald-400" : "text-white/40"
+                )}>
+                  {aiState.lastAuditStatus === 'clean' ? "Audit: Clean" : "Audit: Pending"}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -682,6 +974,80 @@ export const QuantumNexus: React.FC = () => {
               </div>
             </div>
           </div>
+
+          {/* Action Center */}
+          <div className="glass-panel p-8 rounded-2xl border border-white/10">
+            <h3 className="text-lg font-bold uppercase tracking-tighter mb-6 flex items-center gap-3">
+              <Activity className="w-5 h-5 text-yellow-400" />
+              Sovereign Deployment Vectors
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <button 
+                onClick={async () => {
+                  const txId = await SimulationService.verifyMainnetAnchor();
+                  setAiState(prev => ({ ...prev, mainnetAnchored: true }));
+                }}
+                className="p-6 glass-panel border border-white/10 rounded-xl hover:bg-white/5 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-cyan-500/10 rounded-lg group-hover:bg-cyan-500/20 transition-colors">
+                    <ShieldCheck className="w-5 h-5 text-cyan-400" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Option 1</span>
+                </div>
+                <h4 className="text-sm font-bold text-white mb-2">Verify Mainnet Anchor</h4>
+                <p className="text-[10px] text-white/40 uppercase leading-relaxed">Confirm GAYA mainnet settlement & 1% allocation routing.</p>
+              </button>
+
+              <button 
+                onClick={async () => {
+                  await SimulationService.auditLedger();
+                  setAiState(prev => ({ ...prev, lastAuditStatus: 'clean' }));
+                }}
+                className="p-6 glass-panel border border-white/10 rounded-xl hover:bg-white/5 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-emerald-500/10 rounded-lg group-hover:bg-emerald-500/20 transition-colors">
+                    <FileSearch className="w-5 h-5 text-emerald-400" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Option 2</span>
+                </div>
+                <h4 className="text-sm font-bold text-white mb-2">Ledger Integrity Audit</h4>
+                <p className="text-[10px] text-white/40 uppercase leading-relaxed">Validate ForeverChain checksums across 5,000+ nodes.</p>
+              </button>
+
+              <button 
+                onClick={async () => {
+                  await SimulationService.rotateKeys();
+                  setAiState(prev => ({ ...prev, keyRotationStatus: 'secured' }));
+                }}
+                className="p-6 glass-panel border border-white/10 rounded-xl hover:bg-white/5 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-magenta-500/10 rounded-lg group-hover:bg-magenta-500/20 transition-colors">
+                    <Key className="w-5 h-5 text-magenta-400" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Option 3</span>
+                </div>
+                <h4 className="text-sm font-bold text-white mb-2">Key Hardening</h4>
+                <p className="text-[10px] text-white/40 uppercase leading-relaxed">Rotate Nighthawk credentials & MPC shares.</p>
+              </button>
+
+              <button 
+                onClick={() => SimulationService.runE2EDemo()}
+                className="p-6 glass-panel border border-white/10 rounded-xl hover:bg-white/5 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="p-2 bg-yellow-500/10 rounded-lg group-hover:bg-yellow-500/20 transition-colors">
+                    <Rocket className="w-5 h-5 text-yellow-400" />
+                  </div>
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-white/60">Option 4</span>
+                </div>
+                <h4 className="text-sm font-bold text-white mb-2">Full E2E Demo</h4>
+                <p className="text-[10px] text-white/40 uppercase leading-relaxed">Run complete BCI &rarr; GAYA anchor pipeline (Safe Mode).</p>
+              </button>
+            </div>
+          </div>
         </div>
       )}
       <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
@@ -700,7 +1066,8 @@ export const QuantumNexus: React.FC = () => {
           {logs.map((log, idx) => (
             <div key={idx} className={cn(
               "flex gap-4",
-              log.includes('🚀') || log.includes('✅') || log.includes('AI:') ? "text-cyan-400" : "text-white/40"
+              log.includes('🚀') || log.includes('✅') || log.includes('AI:') || log.includes('FINANCE:') || log.includes('SECURITY:') ? "text-cyan-400" : 
+              log.includes('[USER]') ? "text-yellow-400" : "text-white/40"
             )}>
               <span className="opacity-30">[{idx.toString().padStart(2, '0')}]</span>
               <span>{log}</span>
@@ -708,6 +1075,17 @@ export const QuantumNexus: React.FC = () => {
           ))}
           <div ref={logEndRef} />
         </div>
+        <form onSubmit={handleCommand} className="bg-black/60 border-t border-white/10 p-4 flex items-center gap-3">
+          <span className="text-cyan-400 font-mono text-xs font-bold">$</span>
+          <input 
+            type="text"
+            value={commandInput}
+            onChange={(e) => setCommandInput(e.target.value)}
+            placeholder="Enter Sovereign Command (e.g. help)..."
+            className="flex-1 bg-transparent border-none outline-none text-white font-mono text-xs placeholder:text-white/20"
+          />
+          <button type="submit" className="hidden" />
+        </form>
       </div>
 
       {/* Conductor's Final Note */}
