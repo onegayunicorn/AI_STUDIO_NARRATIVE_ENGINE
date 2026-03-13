@@ -643,15 +643,6 @@ export const QuantumNexus: React.FC = () => {
           </form>
         </div>
       </div>
-        </>
-      ) : activeTab === 'wallet' ? (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* ... wallet content ... */}
-        </div>
-      ) : (
-        <ElizaChat />
-      )}
-
         {/* Career Pathway Visualization */}
         <div className="space-y-6">
           <div className="flex items-center gap-3 mb-2">
@@ -677,7 +668,14 @@ export const QuantumNexus: React.FC = () => {
             ))}
           </div>
         </div>
-      </div>
+        </>
+      ) : activeTab === 'wallet' ? (
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* ... wallet content ... */}
+        </div>
+      ) : (
+        <ElizaChat />
+      )}
 
       {/* Trusted Partners & Repositories */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -854,7 +852,6 @@ export const QuantumNexus: React.FC = () => {
           </div>
         </div>
       </div>
-    </>
   ) : (
     <div className="space-y-8">
           {/* Wallet Overview */}
@@ -1049,7 +1046,6 @@ export const QuantumNexus: React.FC = () => {
             </div>
           </div>
         </div>
-      )}
       <div className="glass-panel rounded-2xl border border-white/10 overflow-hidden">
         <div className="bg-white/5 px-6 py-3 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-2">
